@@ -5,7 +5,6 @@ export const chelsea = new Girl('Chelsea', 'Chelsea Porter', 'chelsea')
 
 chelsea.addChoices(
     ...[
-        'intro9z2',
         'cheertalk3',
         'cheertalk4x',
         'cheertalk6x',
@@ -24,5 +23,10 @@ chelsea.addChoices(
         'e1chbye1a',
         'e1leaveparty3',
         'e1chforeplay2',
+        'e2lytext',
+        'e2lytext2',
+        'e2lysex3',
+        'e2lysex4',
+        'e2lysexsquirt',
     ].map(id => selectChoice(id)),
 )

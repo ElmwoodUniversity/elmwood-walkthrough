@@ -29,9 +29,10 @@ export class Girl {
 
 export interface ChoiceOptions {
     includeSideGirls: boolean
+    includeUnselectedForScenes: boolean
 }
 
-type ShowChoice = (selectedGirls: Girl[], opts?: ChoiceOptions) => boolean
+type ShowChoice = (selectedGirls: Girl[], opts: ChoiceOptions) => boolean
 
 export class Choice {
     public optionName: string

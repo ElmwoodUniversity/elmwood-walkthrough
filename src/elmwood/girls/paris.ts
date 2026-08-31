@@ -19,5 +19,7 @@ paris.addChoices(
         'hottub2e',
         'e1pabye',
         'e1pabye1',
+        'e2patext1',
+        'e2patext1a',
     ].map(id => selectChoice(id)),
 )

@@ -6,7 +6,6 @@ export const taylor = new Girl('Taylor', 'Taylor Griffiths', 'taylor')
 taylor.addChoices(
     ...[
         'intro9x',
-        'intro9z2',
         'intro14',
         'intro18',
         'intro20',

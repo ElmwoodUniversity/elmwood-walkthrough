@@ -12,7 +12,6 @@ katie.addChoices(
         'frenchdeepestlie4',
         'intro6',
         'intro9x',
-        'intro9z2',
         'intro14',
         'intro18',
         'intro20',

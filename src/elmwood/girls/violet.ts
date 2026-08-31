@@ -10,5 +10,9 @@ violet.addChoices(
         'preselinaintrox3',
         'hottub1w',
         'hottub1y',
+        'e2viextended',
+        'e2vilakechat',
+        'e2vilove',
+        'e2lighthouse1',
     ].map(id => selectChoice(id)),
 )

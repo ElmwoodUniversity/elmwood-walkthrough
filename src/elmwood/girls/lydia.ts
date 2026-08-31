@@ -26,5 +26,10 @@ lydia.addChoices(
         'e1lyjoke',
         'e1endhot2',
         'e1nearend1',
+        'e2lytext',
+        'e2lytext2',
+        'e2lysex3',
+        'e2lysex4',
+        'e2lysexsquirt',
     ].map(id => selectChoice(id)),
 )

@@ -8,6 +8,7 @@ import Episode from '@/components/Episode.vue'
 const selectedGirls = ref<Girl[]>([])
 const choiceOptions = ref<ChoiceOptions>({
   includeSideGirls: false,
+  includeUnselectedForScenes: true
 })
 const episodes = choices.map(ch => ch.episode).reduce((prev: number[], cur: number) => {
   if (!prev.includes(cur)) prev.push(cur)
@@ -79,6 +80,9 @@ const preloadedClasses = [
           <li class="cursor-pointer"
               :class="{ 'font-bold': choiceOptions.includeSideGirls }"
               @click="choiceOptions.includeSideGirls = !choiceOptions.includeSideGirls">Include Side Girls</li>
+          <li class="cursor-pointer"
+              :class="{ 'font-bold': choiceOptions.includeUnselectedForScenes }"
+              @click="choiceOptions.includeUnselectedForScenes = !choiceOptions.includeUnselectedForScenes">Include Unselected for Scenes</li>
         </ul>
       </div>
     </div>
