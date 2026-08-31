@@ -1,5 +1,6 @@
 import { Girl } from '@/elmwood/elmwood.ts'
 import { selectChoice } from '@/elmwood/choices.ts'
+import { SkillPriority } from '@/elmwood/types/skills.ts'
 
 export const ella = new Girl('Ella', 'Ella Davies', 'ella')
 
@@ -40,4 +41,22 @@ ella.addChoices(
         'e2eldateflirt',
         'e2elaftersex1',
     ].map(id => selectChoice(id)),
+)
+
+ella.addSkillRequirements(
+    {
+            skill: 'Dexterity',
+            neededBy: 'e2b',
+            priority: SkillPriority.BONUS,
+    },
+    {
+            skill: 'Oral Mastery',
+            neededBy: 'e2b',
+            priority: SkillPriority.BONUS,
+    },
+    {
+            skill: 'G-Spot Penetration',
+            neededBy: 'e2b',
+            priority: SkillPriority.BONUS,
+    },
 )

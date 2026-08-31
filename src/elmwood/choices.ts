@@ -1,4 +1,6 @@
-import { Girl, Choice } from '@/elmwood/elmwood.ts'
+import { Girl, Choice, skillPointEvents } from '@/elmwood/elmwood.ts'
+import type { SkillName, SkillPlan, SkillPointId } from '@/elmwood/types/skills.ts'
+import { skills } from '@/elmwood/skills.ts'
 
 const noImpact: string = 'This choice has no impact.'
 const firstKiss: string = 'Your first kiss only matters for the Harem Wars minigame.'
@@ -9,6 +11,14 @@ const hasPrerequisite = (girls: Girl[], includeUnselectedForScenes: boolean, ...
     includeUnselectedForScenes || Girl.listIncludes(girls, ...prereqGirls)
 const isChainedPrerequisite = (girls: Girl[], includeUnselectedForScenes: boolean, thisGirl: string, prereqOf: string[], prereqGirls: string[]) =>
     isPrerequisite(girls, includeUnselectedForScenes, thisGirl, ...prereqOf) && hasPrerequisite(girls, includeUnselectedForScenes, ...prereqGirls)
+const hasSkill = (skillName: SkillName, by: SkillPointId, skillPlan: SkillPlan) => skillPointEvents
+    .slice(0, skillPointEvents.findIndex(ev => ev.id === by) + 1).some(ev => skillPlan[ev.id]?.includes(skillName))
+
+function addSkills(episode: number, event: SkillPointId): Choice[] {
+    return Object.values(skills).map(({ name }) =>
+        new Choice(`Select Skill: ${name}`, `${event}-skill-${name.toLowerCase().replace(/ /g, '-').replace(/[^\w-]/g, '')}`, episode).forSkill(name, event)
+    )
+}
 
 export const choices: Choice[] = [
     // Episode 1 Choices
@@ -19,23 +29,8 @@ export const choices: Choice[] = [
     new Choice('Paris', 'frenchdeepestlie4', 1, 'Katie love +1'),
     new Choice('Thank You', 'intro6', 1, 'Katie love +1'),
     new Choice('Stand back', 'intro9x', 1),
-
     // +30 Skill Points
-    new Choice('Select Skill: Scholar', 'e1-skill-scholar', 1).forSkill('Scholar', 'e1'),
-    new Choice('Select Skill: Ripped', 'e1-skill-ripped', 1).forSkill('Ripped', 'e1'),
-    new Choice('Select Skill: Dexterity', 'e1-skill-dexterity', 1).forSkill('Dexterity', 'e1'),
-    new Choice('Select Skill: Daddy', 'e1-skill-daddy', 1).forSkill('Daddy', 'e1'),
-    new Choice('Select Skill: MILF Enthusiast', 'e1-skill-milf-enthusiast', 1).forSkill('MILF Enthusiast', 'e1'),
-    new Choice('Select Skill: MILF Enjoyer', 'e1-skill-milf-enjoyer', 1).forSkill('MILF Enjoyer', 'e1'),
-    new Choice('Select Skill: Warm Cum', 'e1-skill-warm-cum', 1).forSkill('Warm Cum', 'e1'),
-    new Choice('Select Skill: Soothing Cum', 'e1-skill-soothing-cum', 1).forSkill('Soothing Cum', 'e1'),
-    new Choice('Select Skill: Pineapple Juice', 'e1-skill-pineapple-juice', 1).forSkill('Pineapple Juice', 'e1'),
-    new Choice('Select Skill: Delicious Cum', 'e1-skill-delicious-cum', 1).forSkill('Delicious Cum', 'e1'),
-    new Choice('Select Skill: Beautiful Cum', 'e1-skill-beautiful-cum', 1).forSkill('Beautiful Cum', 'e1'),
-    new Choice('Select Skill: Artistic Cum', 'e1-skill-artistic-cum', 1).forSkill('Artistic Cum', 'e1'),
-    new Choice('Select Skill: Luminosity', 'e1-skill-luminosity', 1).forSkill('Luminosity', 'e1'),
-    new Choice('Select Skill: Nocturnal', 'e1-skill-nocturnal', 1).forSkill('Nocturnal', 'e1'),
-
+    ...addSkills(1, 'e1'),
     new Choice('I don\'t think so', 'intro14', 1),
     new Choice('I\'m a feminist', 'intro18', 1, 'Katie & Taylor love +1'),
     new Choice('Yes, of course.', 'intro20', 1),
@@ -162,66 +157,20 @@ export const choices: Choice[] = [
     new Choice('Buy Molly a vibrator', 'e2ordervibrator1', 2),
     new Choice('Buy DupliDick Vibe', 'e2ordervibrator2', 2),
     new Choice('Introduce yourself', 'e2ntalkx1', 2),
-    new Choice('I\'m excited', 'e2ntalkx1b', 2, 'If you don\'t have Scholar. Naomi love +1'),
-    new Choice('I love her research', 'e2ntalkx1scholar', 2, 'Naomi love +2'),
+    new Choice('I\'m excited', 'e2ntalkx1b', 2, 'Naomi love +1', (_, __, { skillPlan }) => !hasSkill('Scholar', 'e1', skillPlan)),
+    new Choice('I love her research', 'e2ntalkx1scholar', 2, 'Naomi love +2', (_, __, { skillPlan }) => hasSkill('Scholar', 'e1', skillPlan)),
     new Choice('She\'s fantastic', 'e2ntalk2', 2, 'Naomi love +1'),
     new Choice('Highest mark in exam', 'e2nex', 2, 'Naomi love +1'),
     new Choice('Tell two truths, one lie', 'e22tl', 2, 'Naomi love +1'),
-
     // +20 Skill Points
-    new Choice('Select Skill: Scholar', 'e2a-skill-scholar', 2).forSkill('Scholar', 'e2a'),
-    new Choice('Select Skill: Persuasion', 'e2a-skill-persuasion', 2).forSkill('Persuasion', 'e2a'),
-    new Choice('Select Skill: Ripped', 'e2a-skill-ripped', 2).forSkill('Ripped', 'e2a'),
-    new Choice('Select Skill: Warrior', 'e2a-skill-warrior', 2).forSkill('Warrior', 'e2a'),
-    new Choice('Select Skill: Dexterity', 'e2a-skill-dexterity', 2).forSkill('Dexterity', 'e2a'),
-    new Choice('Select Skill: Oral Mastery', 'e2a-skill-oral-mastery', 2).forSkill('Oral Mastery', 'e2a'),
-    new Choice('Select Skill: Daddy', 'e2a-skill-daddy', 2).forSkill('Daddy', 'e2a'),
-    new Choice('Select Skill: Corruption', 'e2a-skill-corruption', 2).forSkill('Corruption', 'e2a'),
-    new Choice('Select Skill: MILF Enthusiast', 'e2a-skill-milf-enthusiast', 2).forSkill('MILF Enthusiast', 'e2a'),
-    new Choice('Select Skill: MILF Enjoyer', 'e2a-skill-milf-enjoyer', 2).forSkill('MILF Enjoyer', 'e2a'),
-    new Choice('Select Skill: Warm Cum', 'e2a-skill-warm-cum', 2).forSkill('Warm Cum', 'e2a'),
-    new Choice('Select Skill: Soothing Cum', 'e2a-skill-soothing-cum', 2).forSkill('Soothing Cum', 'e2a'),
-    new Choice('Select Skill: Pineapple Juice', 'e2a-skill-pineapple-juice', 2).forSkill('Pineapple Juice', 'e2a'),
-    new Choice('Select Skill: Delicious Cum', 'e2a-skill-delicious-cum', 2).forSkill('Delicious Cum', 'e2a'),
-    new Choice('Select Skill: Beautiful Cum', 'e2a-skill-beautiful-cum', 2).forSkill('Beautiful Cum', 'e2a'),
-    new Choice('Select Skill: Artistic Cum', 'e2a-skill-artistic-cum', 2).forSkill('Artistic Cum', 'e2a'),
-    new Choice('Select Skill: Luminosity', 'e2a-skill-luminosity', 2).forSkill('Luminosity', 'e2a'),
-    new Choice('Select Skill: Benevolence', 'e2a-skill-benevolence', 2).forSkill('Benevolence', 'e2a'),
-    new Choice('Select Skill: Nocturnal', 'e2a-skill-nocturnal', 2).forSkill('Nocturnal', 'e2a'),
-
+    ...addSkills(2, 'e2a'),
     new Choice('Have lunch with Naomi', 'e2flecfinal', 2),
     new Choice('Talk to Dr. Riley', 'e2flotalk', 2),
     new Choice('Move seats', 'e2vlecture1', 2, (girls, { includeUnselectedForScenes }) => isPrerequisite(girls, includeUnselectedForScenes, 'Nina', 'Dr. Riley', 'Dr. Novotná')),
-    new Choice('Answer', 'e2panswer1', 2, 'Naomi, Dr. Novotná love +1'),
-
+    new Choice('Answer', 'e2panswer1a', 2, 'Naomi, Dr. Novotná love +1', (_, __, { skillPlan }) => hasSkill('Scholar', 'e2a', skillPlan)),
+    new Choice('Stay Quiet', 'e2panswer1b', 2, (_, __, { skillPlan }) => !hasSkill('Scholar', 'e2a', skillPlan)),
     // +10 Skill Points
-    new Choice('Select Skill: Scholar', 'e2b-skill-scholar', 2).forSkill('Scholar', 'e2b'),
-    new Choice('Select Skill: Persuasion', 'e2b-skill-persuasion', 2).forSkill('Persuasion', 'e2b'),
-    new Choice('Select Skill: Deception', 'e2b-skill-deception', 2).forSkill('Deception', 'e2b'),
-    new Choice('Select Skill: Ripped', 'e2b-skill-ripped', 2).forSkill('Ripped', 'e2b'),
-    new Choice('Select Skill: Warrior', 'e2b-skill-warrior', 2).forSkill('Warrior', 'e2b'),
-    new Choice('Select Skill: Dexterity', 'e2b-skill-dexterity', 2).forSkill('Dexterity', 'e2b'),
-    new Choice('Select Skill: Oral Mastery', 'e2b-skill-oral-mastery', 2).forSkill('Oral Mastery', 'e2b'),
-    new Choice('Select Skill: G-Spot Penetration', 'e2b-skill-g-spot-penetration', 2).forSkill('G-Spot Penetration', 'e2b'),
-    new Choice('Select Skill: Daddy', 'e2b-skill-daddy', 2).forSkill('Daddy', 'e2b'),
-    new Choice('Select Skill: Corruption', 'e2b-skill-corruption', 2).forSkill('Corruption', 'e2b'),
-    new Choice('Select Skill: MILF Enthusiast', 'e2b-skill-milf-enthusiast', 2).forSkill('MILF Enthusiast', 'e2b'),
-    new Choice('Select Skill: MILF Enjoyer', 'e2b-skill-milf-enjoyer', 2).forSkill('MILF Enjoyer', 'e2b'),
-    new Choice('Select Skill: MILF Expert', 'e2b-skill-milf-expert', 2).forSkill('MILF Expert', 'e2b'),
-    new Choice('Select Skill: Warm Cum', 'e2b-skill-warm-cum', 2).forSkill('Warm Cum', 'e2b'),
-    new Choice('Select Skill: Soothing Cum', 'e2b-skill-soothing-cum', 2).forSkill('Soothing Cum', 'e2b'),
-    new Choice('Select Skill: Joint Orgasm', 'e2b-skill-joint-orgasm', 2).forSkill('Joint Orgasm', 'e2b'),
-    new Choice('Select Skill: Pineapple Juice', 'e2b-skill-pineapple-juice', 2).forSkill('Pineapple Juice', 'e2b'),
-    new Choice('Select Skill: Delicious Cum', 'e2b-skill-delicious-cum', 2).forSkill('Delicious Cum', 'e2b'),
-    new Choice('Select Skill: Cum Drunk', 'e2b-skill-cum-drunk', 2).forSkill('Cum Drunk', 'e2b'),
-    new Choice('Select Skill: Beautiful Cum', 'e2b-skill-beautiful-cum', 2).forSkill('Beautiful Cum', 'e2b'),
-    new Choice('Select Skill: Artistic Cum', 'e2b-skill-artistic-cum', 2).forSkill('Artistic Cum', 'e2b'),
-    new Choice('Select Skill: Cum Selfie', 'e2b-skill-cum-selfie', 2).forSkill('Cum Selfie', 'e2b'),
-    new Choice('Select Skill: Luminosity', 'e2b-skill-luminosity', 2).forSkill('Luminosity', 'e2b'),
-    new Choice('Select Skill: Benevolence', 'e2b-skill-benevolence', 2).forSkill('Benevolence', 'e2b'),
-    new Choice('Select Skill: Nocturnal', 'e2b-skill-nocturnal', 2).forSkill('Nocturnal', 'e2b'),
-    new Choice('Select Skill: Dark Temptation', 'e2b-skill-dark-temptation', 2).forSkill('Dark Temptation', 'e2b'),
-
+    ...addSkills(2, 'e2b'),
     new Choice('Talk to Dr. Novotná first', 'e2vertalk', 2),
     new Choice('I\'m interested', 'e2ninatalk2', 2),
     new Choice('Show me the lake & lighthouse', 'e2viextended', 2),

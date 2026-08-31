@@ -76,12 +76,12 @@ export function additionalCost(skillName: SkillName, alreadyBought: Set<SkillNam
         .reduce((total, name) => total + skills[name].cost, 0)
 }
 
-export function buildSkillPlan(girls: Girl[]): SkillPlan {
+function buildRequiredSkillPlan(selectedGirls: Girl[]): SkillPlan {
     const plan: SkillPlan = {}
     const alreadyBought = new Set<SkillName>()
     let availablePoints = 0
 
-    const requirements = girls
+    const requirements = selectedGirls
         .flatMap(girl => girl.skillRequirements)
         .sort((a, b) => {
             if (a.priority !== b.priority) {
@@ -139,4 +139,119 @@ export function buildSkillPlan(girls: Girl[]): SkillPlan {
     }
 
     return plan
+}
+
+function skillPlanIsEmpty(plan: SkillPlan): boolean {
+    return Object.values(plan)
+        .every(skills => !skills?.length)
+}
+
+function getAvailablePointsAtEvent(plan: SkillPlan, throughEventIndex: number): number {
+    let points = 0
+
+    for (let i = 0; i <= throughEventIndex; i++) {
+        const event = skillPointEvents[i]!
+
+        points += event.points
+
+        for (const skillName of plan[event.id] ?? []) {
+            points -= skills[skillName].cost
+        }
+    }
+
+    return points
+}
+
+function getSafeSparePoints(plan: SkillPlan, fromEventIndex: number): number {
+    let availablePoints = 0
+    let minimumBalance = Infinity
+
+    for (let i = 0; i < skillPointEvents.length; i++) {
+        const event = skillPointEvents[i]!
+
+        availablePoints += event.points
+
+        for (const skillName of plan[event.id] ?? []) {
+            availablePoints -= skills[skillName].cost
+        }
+
+        if (i >= fromEventIndex) {
+            minimumBalance = Math.min(minimumBalance, availablePoints)
+        }
+    }
+
+    return Math.max(0, minimumBalance)
+}
+
+const fallbackSkills: SkillName[] = [
+    'Warm Cum',
+    'Soothing Cum',
+    'Joint Orgasm',
+    'Pineapple Juice',
+    'Delicious Cum',
+    'Cum Drunk',
+    'Beautiful Cum',
+    'Artistic Cum',
+    'Cum Selfie',
+    'Cum Addiction',
+]
+
+function addFallbacks(selectedGirls: Girl[], plan: SkillPlan): SkillPlan {
+    if (selectedGirls.length !== 1) {
+        return plan
+    }
+
+    const alreadyBought = new Set<SkillName>()
+    const noNormalSkills = skillPlanIsEmpty(plan)
+
+    for (let eventIndex = 0; eventIndex < skillPointEvents.length; eventIndex++) {
+        const event = skillPointEvents[eventIndex]!
+
+        // Record skills already scheduled at this event
+        for (const skillName of plan[event.id] ?? []) {
+            alreadyBought.add(skillName)
+        }
+
+        let safePoints: number = noNormalSkills
+            ? getAvailablePointsAtEvent(plan, eventIndex)
+            : getSafeSparePoints(plan, eventIndex)
+
+        if (safePoints <= 0) {
+            continue
+        }
+
+        for (const fallback of fallbackSkills) {
+            if (alreadyBought.has(fallback)) {
+                continue
+            }
+
+            const missingSkills = [...getRequiredSkills(fallback)]
+                .filter(skill => !alreadyBought.has(skill))
+
+            const cost = missingSkills.reduce((total, skill) =>
+                total + skills[skill].cost, 0)
+
+            plan[event.id] ??= []
+
+            for (const skill of missingSkills) {
+                plan[event.id]!.push(skill)
+                alreadyBought.add(skill)
+            }
+
+            // Recalculate before trying another fallback
+            safePoints = getSafeSparePoints(plan, eventIndex)
+
+            if (safePoints <= 0) {
+                break
+            }
+        }
+    }
+
+    return plan
+}
+
+export function buildSkillPlan(selectedGirls: Girl[]): SkillPlan {
+    const plan = buildRequiredSkillPlan(selectedGirls)
+
+    return addFallbacks(selectedGirls, plan)
 }

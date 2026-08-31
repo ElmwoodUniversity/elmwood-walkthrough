@@ -13,7 +13,7 @@ naomi.addChoices(
         'e2nex',
         'e22tl',
         'e2flecfinal',
-        'e2panswer1',
+        'e2panswer1a',
     ].map(id => selectChoice(id)),
 )
 

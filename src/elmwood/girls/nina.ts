@@ -20,9 +20,4 @@ nina.addChoices(
 )
 
 nina.addSkillRequirements(
-    {
-        skill: 'Persuasion',
-        neededBy: 'e2b',
-        priority: SkillPriority.RECOMMENDED,
-    },
 )
