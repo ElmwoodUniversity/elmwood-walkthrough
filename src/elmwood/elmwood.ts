@@ -1,8 +1,26 @@
+import type {
+    SkillName,
+    SkillPlan,
+    SkillPointEvent,
+    SkillPointId,
+    SkillRequirement,
+    WalkthroughState,
+} from '@/elmwood/types/skills.ts'
+import type { ChoiceOptions, ChoiceSkill, ShowChoice } from '@/elmwood/types/choices.ts'
+
+
+export const skillPointEvents: SkillPointEvent[] = [
+    { id: 'e1', points: 30 },
+    { id: 'e2a', points: 20 },
+    { id: 'e2b', points: 10 },
+]
+
 export class Girl {
     public shortName: string
     public longName: string
     public colour: string
     public choices: Choice[] = []
+    public skillRequirements: SkillRequirement[] = []
 
     constructor(shortName: string, longName: string, colour: string) {
         this.shortName = shortName
@@ -12,6 +30,10 @@ export class Girl {
 
     public addChoices(...choices: Choice[]): void {
         this.choices.push(...choices)
+    }
+
+    public addSkillRequirements(...requirements: SkillRequirement[]): void {
+        this.skillRequirements.push(...requirements)
     }
 
     public static listIncludes(list: Girl[], ...names: string[]): boolean {
@@ -27,19 +49,13 @@ export class Girl {
     }
 }
 
-export interface ChoiceOptions {
-    includeSideGirls: boolean
-    includeUnselectedForScenes: boolean
-}
-
-type ShowChoice = (selectedGirls: Girl[], opts: ChoiceOptions) => boolean
-
 export class Choice {
     public optionName: string
     public optionId: string
     public episode: number
     public note?: string
     public showPred?: ShowChoice
+    public skill?: ChoiceSkill
 
     constructor(optionName: string, optionId: string, episode: number)
     constructor(optionName: string, optionId: string, episode: number, note: string)
@@ -61,11 +77,20 @@ export class Choice {
         }
     }
 
-    public doShow(girls: Girl[], choiceOptions: ChoiceOptions): boolean {
+    public forSkill(name: SkillName, event: SkillPointId): this {
+        this.skill = { name, event }
+        return this
+    }
+
+    public doShow(girls: Girl[], choiceOptions: ChoiceOptions, state: WalkthroughState): boolean {
+        if (this.skill) {
+            return state.skillPlan[this.skill.event]?.includes(this.skill.name) ?? false
+        }
+
         for (const girl of girls) {
             if (girl.choices.map(ch => ch.optionId).includes(this.optionId)) {
                 if (this.showPred) {
-                    return this.showPred(girls, choiceOptions)
+                    return this.showPred(girls, choiceOptions, state)
                 }
                 return true
             }
@@ -73,25 +98,25 @@ export class Choice {
         return false
     }
 
-    public isConflicting(girls: Girl[], conflictingChoices: Choice[][], choiceOptions: ChoiceOptions): boolean {
+    public isConflicting(girls: Girl[], conflictingChoices: Choice[][], choiceOptions: ChoiceOptions, state: WalkthroughState): boolean {
         for (const group of conflictingChoices) {
             const inGroup = group.map(ch => ch.optionId).includes(this.optionId)
             if (!inGroup) {
                 continue
             }
-            const activeChoices = group.filter(ch => ch.doShow(girls, choiceOptions))
+            const activeChoices = group.filter(ch => ch.doShow(girls, choiceOptions, state))
             return activeChoices.length > 1
         }
         return false
     }
 
-    public conflictingSize(girls: Girl[], conflictingChoices: Choice[][], choiceOptions: ChoiceOptions): number {
+    public conflictingSize(girls: Girl[], conflictingChoices: Choice[][], choiceOptions: ChoiceOptions, state: WalkthroughState): number {
         for (const group of conflictingChoices) {
             const inGroup = group.map(ch => ch.optionId).includes(this.optionId)
             if (!inGroup) {
                 continue
             }
-            const activeChoices = group.filter(ch => ch.doShow(girls, choiceOptions))
+            const activeChoices = group.filter(ch => ch.doShow(girls, choiceOptions, state))
             return activeChoices.length
         }
         return -1

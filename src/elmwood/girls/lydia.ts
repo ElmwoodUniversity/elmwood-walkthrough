@@ -1,11 +1,11 @@
 import { Girl } from '@/elmwood/elmwood.ts'
 import { selectChoice } from '@/elmwood/choices.ts'
+import { SkillPriority } from '@/elmwood/types/skills.ts'
 
 export const lydia = new Girl('Lydia', 'Lydia Blackburn', 'lydia')
 
 lydia.addChoices(
     ...[
-        'intro9z2',
         'openlyd3',
         'openlyd7',
         'cheertalk3',
@@ -32,4 +32,12 @@ lydia.addChoices(
         'e2lysex4',
         'e2lysexsquirt',
     ].map(id => selectChoice(id)),
+)
+
+lydia.addSkillRequirements(
+    {
+        skill: 'Ripped',
+        neededBy: 'e1',
+        priority: SkillPriority.REQUIRED,
+    },
 )

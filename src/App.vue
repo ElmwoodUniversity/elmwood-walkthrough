@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import type { Girl, ChoiceOptions } from '@/elmwood/elmwood.ts'
+import type { Girl } from '@/elmwood/elmwood.ts'
 import { choices } from '@/elmwood/choices.ts'
 import { girls } from '@/elmwood/girls'
-import { ref } from 'vue'
+import type { ChoiceOptions } from '@/elmwood/types/choices.ts'
+import { computed, ref } from 'vue'
 import Episode from '@/components/Episode.vue'
+import { buildSkillPlan } from '@/elmwood/skills.ts'
 
 const selectedGirls = ref<Girl[]>([])
 const choiceOptions = ref<ChoiceOptions>({
@@ -27,6 +29,8 @@ const toggleGirl = (girl: Girl): void => {
 
 const isSelectedGirl = (girl: Girl) =>
     !!selectedGirls.value.find(g => g.shortName === girl.shortName)
+
+const skillPlan = computed(() => buildSkillPlan(selectedGirls.value))
 
 const preloadedClasses = [
   'text-ashley',
@@ -62,7 +66,8 @@ const preloadedClasses = [
           </div>
         </div>
         <template v-for="episode in episodes" v-else>
-          <Episode :episode="episode" :selected-girls="selectedGirls" :choice-options="choiceOptions" />
+          <Episode :episode="episode" :selected-girls="selectedGirls"
+                   :choice-options="choiceOptions" :skill-plan="skillPlan" />
         </template>
       </div>
     </div>

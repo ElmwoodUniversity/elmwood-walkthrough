@@ -29,6 +29,9 @@ const possibleClasses = [
 ]
 
 const borderStyle = computed(() => {
+  if (props.girls.length === 0) {
+    return { background: '#ffffff' }
+  }
   const colours = props.girls
       .map(girl => `var(--color-${girl.colour})`)
       .join(', ')
