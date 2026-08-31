@@ -68,12 +68,12 @@ tasha.addSkillRequirements(girls => {
         {
             skill: 'Ripped',
             neededBy: 'e3b',
-            priority: SkillPriority.STRONGLY_RECOMMENDED,
+            priority: SkillPriority.RECOMMENDED,
         },
         {
             skill: 'Oral Mastery',
             neededBy: 'e3b',
-            priority: SkillPriority.REQUIRED,
+            priority: SkillPriority.STRONGLY_RECOMMENDED,
         },
         {
             skill: 'Warrior',
