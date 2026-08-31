@@ -9,7 +9,7 @@ import { buildSkillPlan } from '@/elmwood/skills.ts'
 
 const selectedGirls = ref<Girl[]>([])
 const choiceOptions = ref<ChoiceOptions>({
-  includeSideGirls: false,
+  includeSideGirls: true,
   includeUnselectedForScenes: true
 })
 const episodes = choices.map(ch => ch.episode).reduce((prev: number[], cur: number) => {

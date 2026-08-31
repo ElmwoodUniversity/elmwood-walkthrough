@@ -82,7 +82,7 @@ function buildRequiredSkillPlan(selectedGirls: Girl[]): SkillPlan {
     let availablePoints = 0
 
     const requirements = selectedGirls
-        .flatMap(girl => girl.skillRequirements)
+        .flatMap(girl => girl.getSkillRequirements(selectedGirls))
         .sort((a, b) => {
             if (a.priority !== b.priority) {
                 return b.priority - a.priority

@@ -12,5 +12,13 @@ selina.addChoices(
         'selinaintro12',
         'selinaintro12c',
         'e1ssex1',
+        'e3stext',
+        'e3stext1',
+        'e3stalk',
+        'e3stalk2c',
+        'e3stalk3',
+        'e3stalk4a',
+        'e3stalk5',
+        'e3ssex',
     ].map(id => selectChoice(id)),
 )

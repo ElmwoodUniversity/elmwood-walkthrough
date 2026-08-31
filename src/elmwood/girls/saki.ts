@@ -1,5 +1,6 @@
 import { Girl } from '@/elmwood/elmwood.ts'
 import { selectChoice } from '@/elmwood/choices.ts'
+import { SkillPriority } from '@/elmwood/types/skills.ts'
 
 export const saki = new Girl('Saki', 'Saki Kishimoto', 'saki')
 
@@ -20,5 +21,19 @@ saki.addChoices(
         'e2tdshowdickoption',
         'e2tdshowdickoption2',
         'e2sanight2',
+        'e3saki3c',
+        'e3saki4',
+        'e3sakibanana',
+        'e3sakibanana1',
+        'e3sakibanana1a',
+        'e3sakicorruption',
     ].map(id => selectChoice(id)),
+)
+
+saki.addSkillRequirements(
+    {
+            skill: 'Corruption',
+            neededBy: 'e3b',
+            priority: SkillPriority.REQUIRED,
+    },
 )

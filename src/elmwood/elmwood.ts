@@ -1,4 +1,5 @@
 import type {
+    SkillChoice,
     SkillName,
     SkillPlan,
     SkillPointEvent,
@@ -13,6 +14,8 @@ export const skillPointEvents: SkillPointEvent[] = [
     { id: 'e1', points: 30 },
     { id: 'e2a', points: 20 },
     { id: 'e2b', points: 10 },
+    { id: 'e3a', points: 20 },
+    { id: 'e3b', points: 20 },
 ]
 
 export class Girl {
@@ -21,6 +24,7 @@ export class Girl {
     public colour: string
     public choices: Choice[] = []
     public skillRequirements: SkillRequirement[] = []
+    public skillRequirementPredicate: SkillChoice|undefined
 
     constructor(shortName: string, longName: string, colour: string) {
         this.shortName = shortName
@@ -32,8 +36,27 @@ export class Girl {
         this.choices.push(...choices)
     }
 
-    public addSkillRequirements(...requirements: SkillRequirement[]): void {
-        this.skillRequirements.push(...requirements)
+    public addSkillRequirements(...requirements: SkillRequirement[]): void
+    public addSkillRequirements(requirements: SkillChoice): void
+    public addSkillRequirements(...requirements: SkillRequirement[]|[SkillChoice]): void {
+        if (requirements.length === 0) {
+            return
+        }
+        if (requirements.every(
+            (requirement): requirement is SkillRequirement =>
+                typeof requirement !== 'function'
+        )) {
+            this.skillRequirements.push(...requirements)
+        } else {
+            this.skillRequirementPredicate = requirements[0]
+        }
+    }
+
+    public getSkillRequirements(selectedGirls: Girl[]): SkillRequirement[] {
+        if (this.skillRequirementPredicate) {
+            return this.skillRequirementPredicate(selectedGirls)
+        }
+        return this.skillRequirements
     }
 
     public static listIncludes(list: Girl[], ...names: string[]): boolean {

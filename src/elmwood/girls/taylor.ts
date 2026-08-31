@@ -14,5 +14,11 @@ taylor.addChoices(
         'selinaintro5a',
         'hotnaked1',
         'e1taydebrief1',
+        'e3femsocattend',
+        'e3femsoc2c',
+        'e3kttalk1x',
+        'e3kttalk4b',
+        'e3ktkisshug',
+        'e3jacket',
     ].map(id => selectChoice(id)),
 )
