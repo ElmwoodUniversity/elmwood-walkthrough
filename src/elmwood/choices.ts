@@ -1,18 +1,23 @@
 import { Girl, Choice, skillPointEvents } from '@/elmwood/elmwood.ts'
 import type { SkillName, SkillPlan, SkillPointId } from '@/elmwood/types/skills.ts'
 import { skills } from '@/elmwood/skills.ts'
+import { type GirlName } from '@/elmwood/types/girls.ts'
 
 const noImpact: string = 'This choice has no impact.'
 const firstKiss: string = 'Your first kiss only matters for the Harem Wars minigame.'
 
-const isPrerequisite = (girls: Girl[], includeUnselectedForScenes: boolean, thisGirl: string, ...prereqOf: string[]) =>
+const isPrerequisite = (girls: Girl[], includeUnselectedForScenes: boolean, thisGirl: GirlName, ...prereqOf: GirlName[]) =>
     Girl.listIncludes(girls, thisGirl) || (includeUnselectedForScenes && Girl.listIncludesAny(girls, ...prereqOf))
-const hasPrerequisite = (girls: Girl[], includeUnselectedForScenes: boolean, ...prereqGirls: string[]) =>
+const hasPrerequisite = (girls: Girl[], includeUnselectedForScenes: boolean, ...prereqGirls: GirlName[]) =>
     includeUnselectedForScenes || Girl.listIncludes(girls, ...prereqGirls)
-const isChainedPrerequisite = (girls: Girl[], includeUnselectedForScenes: boolean, thisGirl: string, prereqOf: string[], prereqGirls: string[]) =>
+const isChainedPrerequisite = (girls: Girl[], includeUnselectedForScenes: boolean, thisGirl: GirlName, prereqOf: GirlName[], prereqGirls: GirlName[]) =>
     isPrerequisite(girls, includeUnselectedForScenes, thisGirl, ...prereqOf) && hasPrerequisite(girls, includeUnselectedForScenes, ...prereqGirls)
 const hasSkill = (skillName: SkillName, by: SkillPointId, skillPlan: SkillPlan) => skillPointEvents
     .slice(0, skillPointEvents.findIndex(ev => ev.id === by) + 1).some(ev => skillPlan[ev.id]?.includes(skillName))
+const hasChoices = (shownChoices: Choice[], ...ids: string[]): boolean =>
+    ids.every(id => shownChoices.map(ch => ch.optionId).includes(id))
+const hasChoicesOr = (shownChoices: Choice[], ...ids: string[]) =>
+    ids.some(id => shownChoices.map(ch => ch.optionId).includes(id))
 
 function addSkills(episode: number, event: SkillPointId): Choice[] {
     return Object.values(skills).map(({ name }) =>
@@ -20,6 +25,7 @@ function addSkills(episode: number, event: SkillPointId): Choice[] {
     )
 }
 
+// TODO: Add visible choices to the predicate, allowing to easily check if a previous choice was shown
 export const choices: Choice[] = [
     // Episode 1 Choices
     new Choice('You have beautiful eyes.', 'intro3', 1, 'Katie love +1'),
@@ -295,6 +301,110 @@ export const choices: Choice[] = [
     new Choice('Flirty', 'e3ddate11a', 3, 'Kat lust +1', (_, { includeSideGirls }) => includeSideGirls),
     new Choice('A kiss', 'e3ddate90', 3, (_, { includeSideGirls }) => includeSideGirls),
     new Choice('Help Chelsea seduce Kat', 'e3ddate110', 3, (_, { includeSideGirls }) => includeSideGirls),
+    // Episode 4
+    new Choice('Sure', 'e4flec3', 4),
+    // +20 Skill Points
+    ...addSkills(4, 'e4a'),
+    new Choice('Sure', 'e4flec8', 4),
+    // TODO: Add telling Chelsea to either tell Lydia about the threesome or not here, once outcomes are known
+    // +10 Skill Points
+    ...addSkills(4, 'e4b'),
+    new Choice('Ask her out on a date', 'e4ninaday2a', 4),
+    new Choice('Teacher\'s lounge', 'e4ninaday2axa', 4),
+    new Choice('Visit Tasha & Ashley', 'e4montash', 4),
+    new Choice('Lie', 'e4montash1', 4, (girls, { includeSideGirls }) => Girl.listIncludes(girls, 'Chelsea') && includeSideGirls),
+    new Choice('Watch film', 'e4montash4', 4),
+    new Choice('No (kiss her)', 'e4montash5', 4),
+    new Choice('Make an excuse', 'e4ninanight', 4, girls => Girl.listIncludes(girls, 'Nina')),
+    new Choice('Sleep with them', 'e4montash6', 4, girls => Girl.listIncludesNone(girls, 'Nina')),
+    new Choice('You look beautiful', 'e4infil6', 4, 'Nina love +1'),
+    new Choice('Ukraine', 'e4flagua', 4, 'Nina love +1 (If all flags correct)'),
+    new Choice('Argentina', 'e4flagar', 4),
+    new Choice('U.S.A.', 'e4flagus', 4),
+    new Choice('Belgium', 'e4flagbe', 4),
+    new Choice('India', 'e4flagin', 4),
+    new Choice('South Africa', 'e4flagza', 4),
+    new Choice('Czech Republic', 'e4flagcz', 4),
+    new Choice('Italy', 'e4flagit', 4),
+    new Choice('France', 'e4flagfr', 4),
+    new Choice('Canada', 'e4flagca', 4),
+    new Choice('Switzerland', 'e4flagch', 4),
+    new Choice('Spain', 'e4flages', 4),
+    new Choice('Brazil', 'e4flagbr', 4),
+    new Choice('China', 'e4flagcn', 4),
+    new Choice('Australia', 'e4flagau', 4),
+    new Choice('Put your arm around her', 'e4niseduce', 4),
+    new Choice('I want to fuck you', 'e4nisex', 4),
+    new Choice('Invite her in', 'e4tay2', 4),
+    new Choice('Compliment her outfit', 'e4tay3', 4, 'Taylor love +1'),
+    new Choice('Ask her about Katie', 'e4tay3a', 4, 'Katie love +1', girls => Girl.listIncludes(girls, 'Katie')),
+    new Choice('Ask her about Violet', 'e4tay3b', 4, (_, __, { skillPlan }) => hasSkill('Lie Detection', 'e4b', skillPlan )),
+    new Choice('Tell her about the Gorillas', 'e4tay3c', 4, 'Taylor love +1'),
+    new Choice('Flirt', 'e4tay5', 4, 'Taylor love +1'),
+    new Choice('Help control confounding variables', 'e4naomi11b', 4, 'Naomi love +1'),
+    new Choice('No effect', 'e4naomi1d', 4, 'Naomi love +1', (_, __, { skillPlan }) => hasSkill('Persuasion', 'e4b', skillPlan )),
+    new Choice('Test her further', 'e4naomi2b', 4, 'Naomi love +1', (_, __, { skillPlan }) => hasSkill('Deception', 'e4b', skillPlan)),
+    new Choice('Make a romantic bet', 'e4naomi4a', 4),
+    new Choice('Flirt', 'e4naomi5a', 4),
+    new Choice('Kiss her', 'e4naomi6', 4),
+    new Choice('Tell her about your experiences', 'e4naomi7', 4, (_, __, { shownChoices }) => hasChoicesOr(shownChoices, 'e1chsex2', 'e3padate12')),
+    new Choice('Tell her about Paris', 'e4naomipa', 4, 'Naomi lust +1', (_, __, { shownChoices }) => hasChoices(shownChoices, 'e4naomi7', 'e3padate12')),
+    new Choice('Tell her about Selina', 'e4naomis', 4, 'Naomi lust +1', (_, __, { shownChoices }) => hasChoices(shownChoices, 'e4naomi7', 'e1ssex1')),
+    new Choice('Tell her about Lydia', 'e4naomily', 4, 'Naomi lust +1', (_, __, { shownChoices }) => hasChoices(shownChoices, 'e4naomi7', 'e2lysex4')),
+    new Choice('Tell her about Ella', 'e4naomiel', 4, 'Naomi lust +1', (_, __, { shownChoices }) => hasChoices(shownChoices, 'e4naomi7', 'e2elaftersex1')),
+    new Choice('Tell her about Chelsea', 'e4naomich', 4, 'Naomi lust +1', (_, __, { shownChoices }) => hasChoices(shownChoices, 'e4naomi7', 'e1chsex2')),
+    new Choice('Text Selina', 'e4selina2', 4),
+    new Choice('Put her in her place', 'e4dd2', 4, (_, __, { skillPlan }) => hasSkill('Persuasion', 'e4b', skillPlan)),
+    new Choice('Text Violet', 'e4vitext', 4),
+    new Choice('I\'m free', 'e4ctext', 4, (_, __, { shownChoices }) => hasChoices(shownChoices, 'e3ctalk7')),
+    new Choice('Text Paris', 'e4patext1', 4, (_, __, { shownChoices }) => hasChoices(shownChoices, 'e3padate12')),
+    new Choice('Nominate yourself for course rep', 'e4cereal2', 4),
+    new Choice('I\'m highly empathetic & communicative', 'e4vnom1b', 4, (_, __, { skillPlan }) => hasSkill('Persuasion', 'e4b', skillPlan)),
+    new Choice('I have lots of friends on the course', 'e4vnom1c', 4, (_, __, { skillPlan }) => !hasSkill('Persuasion', 'e4b', skillPlan)),
+    new Choice('I\'ll always try my best', 'e4vnom1d', 4, (_, __, { skillPlan }) => !hasSkill('Persuasion', 'e4b', skillPlan)),
+    new Choice('We like it', 'e4vnom2b', 4),
+    new Choice('Many struggle with the strict environment', 'e4vnom3e', 4, (_, __, { skillPlan }) => hasSkill('Persuasion', 'e4b', skillPlan)),
+    new Choice('We don\'t like it', 'e4vnom3c', 4, (_, __, { skillPlan }) => !hasSkill('Persuasion', 'e4b', skillPlan)),
+    new Choice('Flirt', 'e4vnom4a', 4, 'Dr. Novotná love +3', (_, __, { skillPlan }) => hasSkill('Scholar', 'e4b', skillPlan) && !hasSkill('Persuasion', 'e4b', skillPlan) && hasSkill('MILF Expert', 'e4b', skillPlan)),
+    new Choice('Flirt', 'e4vnom4b', 4, 'Dr. Novotná love +9', (_, __, { skillPlan }) => hasSkill('Persuasion', 'e4b', skillPlan) && hasSkill('MILF Expert', 'e4b', skillPlan)),
+    new Choice('Buy Florence flowers', 'e4floflowers2', 4, 'Dr. Riley love +4', (_, __, { shownChoices }) => hasChoices(shownChoices, 'e3flofli3a')),
+    new Choice('Text Katie', 'e4kttext', 4),
+    // TODO: Check if HW tournament offers any love in the future
+    new Choice('Flirt', 'e4vi2a', 4, 'Violet love +4, lust +1'),
+    new Choice('It looks cool!', 'e4vi4', 4, 'Violet love +1'),
+    new Choice('Steal her controller (Flirt)', 'e4vi7', 4),
+    new Choice('Kiss her', 'e4vikiss', 4),
+    new Choice('Offer to cook her dinner', 'e4cook2', 4),
+    new Choice('Ask Jordan about what Saki said', 'e4joey2saki', 4, (_, __, { shownChoices }) => hasChoices(shownChoices, 'e4ctext')),
+    new Choice('Ask about their degrees', 'e4joey3a', 4, (_, __, { shownChoices }) => hasChoices(shownChoices, 'e4ctext')),
+    new Choice('Ask about their hobbies', 'e4joey3b', 4, (_, __, { shownChoices }) => hasChoices(shownChoices, 'e4ctext')),
+    new Choice('Compliment their outfits', 'e4joey3c', 4, (_, __, { shownChoices }) => hasChoices(shownChoices, 'e4ctext')),
+    new Choice('Let\'s play pool (Continue)', 'e4joey4', 4, (_, __, { shownChoices }) => hasChoices(shownChoices, 'e4ctext')),
+    new Choice('Talk about her cookies', 'e4ktcall1a', 4, 'Katie love +1', (_, __, { shownChoices }) => hasChoices(shownChoices, 'e3jacket')),
+    new Choice('Talk about seeing Violet', 'e4ktcall1b', 4, 'Katie love +1', (_, __, { shownChoices }) => hasChoices(shownChoices, 'e4vitext')),
+    new Choice('You should keep your promise', 'e4ktcall1bvi', 4, 'Katie, Taylor, Violet love +1', (_, __, { shownChoices }) => hasChoices(shownChoices, 'e4ktcall1b', 'e4vikiss')),
+    new Choice('Ask her out on a date', 'e4ktcall1c', 4),
+    new Choice('Praise her', 'e4saki1', 4, 'Saki love +1'),
+    new Choice('Flirt', 'e4saki3', 4, 'Saki love +1'),
+    new Choice('Kiss her', 'e4saki4', 4, 'Saki lust +1'),
+    new Choice('Go further & corrupt her', 'e4sacorrupt', 4, (_, __, { skillPlan }) => hasSkill('Corruption', 'e4b', skillPlan)),
+    new Choice('Go further', 'e4safinger', 4, (_, __, { skillPlan }) => !hasSkill('Corruption', 'e4b', skillPlan)),
+    new Choice('Teach her that you own her orgasms', 'e4saownership', 4, (_, __, { skillPlan }) => hasSkill('Ownership', 'e4b', skillPlan) && hasSkill('Dexterity', 'e4b', skillPlan)),
+    new Choice('Make her cum', 'e4sacumx', 4, (_, __, { skillPlan }) => !hasSkill('Ownership', 'e4b', skillPlan) && hasSkill('Dexterity', 'e4b', skillPlan)),
+    new Choice('(Go with Lydia and Ella)', 'e4bjcomp2', 4, (_, __, { shownChoices }) => hasChoices(shownChoices, 'e1elbj1')),
+    new Choice('Threaten him', 'e4halloleave1a', 4, 'Twins love +1'),
+    new Choice('Punch him', 'e4halloleave1b', 4, 'Twins love +10, lust +2', (_, __, { skillPlan }) => hasSkill('Warrior', 'e4b', skillPlan)),
+    new Choice('I want the cuddles', 'e4witchdecision', 4, (_, __, { shownChoices }) => hasChoicesOr(shownChoices, 'e3padate8', 'e1chsex2')),
+    new Choice('Fuck yes!', 'e4pole1', 4, (_, __, { shownChoices }) => hasChoices(shownChoices, 'e4bjcomp2', 'e2lysexsquirt')),
+    new Choice('Talk to Ella', 'e4ellatalk', 4, (_, __, { shownChoices }) => hasChoices(shownChoices, 'e4pole1', 'e2elaftersex1')),
+    new Choice('It\'s ok if you can\'t squirt', 'e4ellatalk1b', 4, (_, __, { shownChoices }) => hasChoices(shownChoices, 'e4ellatalk')),
+    new Choice('No, I don\'t care', 'e4ellatalk1bx', 4, (_, __, { shownChoices }) => hasChoices(shownChoices, 'e4ellatalk1b')),
+    new Choice('Compliment here', 'e4ellatalk1d', 4, (_, __, { shownChoices }) => hasChoices(shownChoices, 'e4ellatalk')),
+    new Choice('(Continue)', 'e4ellatalk2', 4, (_, __, { shownChoices }) => hasChoices(shownChoices, 'e4ellatalk')),
+    new Choice('Something relaxed', 'e4ellatalk3', 4, (_, __, { shownChoices }) => hasChoices(shownChoices, 'e4ellatalk2')),
+    new Choice('Compliment her', 'e4eldate', 4, (_, __, { shownChoices }) => hasChoices(shownChoices, 'e4ellatalk3')),
+    new Choice('Fuck Ella', 'e4elsex', 4, (_, __, { shownChoices }) => hasChoices(shownChoices, 'e4ellatalk3')),
+    new Choice('Cuddle Lydia', 'e4postelsex1', 4, (_, __, { shownChoices }) => hasChoices(shownChoices, 'e4elsex')), // TODO: Check if this is required for any future Lydia content and add a `includeUnselectedForScenes` check
 ]
 
 export const selectChoice = (id: string): Choice => {
@@ -315,4 +425,5 @@ export const conflictingChoices: Choice[][] = [
     ['e2ntalkx1b', 'e2ntalkx1scholar'].map(id => selectChoice(id)),
     ['e3massage1a', 'e3massage1b', 'e3massage1c', 'e3massage1d'].map(id => selectChoice(id)),
     ['e3padate1a', 'e3padate1c'].map(id => selectChoice(id)),
+    ['e4vnom1c', 'e4vnom1d'].map(id => selectChoice(id)),
 ]

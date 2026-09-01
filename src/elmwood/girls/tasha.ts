@@ -52,6 +52,15 @@ tasha.addChoices(
         'e3massage6',
         'e3massagedx',
         'e3confront2',
+        'e4montash',
+        'e4montash1',
+        'e4montash4',
+        'e4montash5',
+        'e4ninanight',
+        'e4montash6',
+        'e4halloleave1a',
+        'e4halloleave1b',
+        'e4witchdecision',
     ].map(id => selectChoice(id)),
 )
 
@@ -79,7 +88,12 @@ tasha.addSkillRequirements(girls => {
             skill: 'Warrior',
             neededBy: 'e3b',
             priority: SkillPriority.BONUS,
-        }
+        },
+        {
+            skill: 'Warrior',
+            neededBy: 'e4b',
+            priority: SkillPriority.STRONGLY_RECOMMENDED,
+        },
     )
 
     return requirements

@@ -198,7 +198,7 @@ const fallbackSkills: SkillName[] = [
 
 function addFallbacks(selectedGirls: Girl[], plan: SkillPlan): SkillPlan {
     if (selectedGirls.length !== 1) {
-        return plan
+        // return plan
     }
 
     const alreadyBought = new Set<SkillName>()
@@ -230,6 +230,10 @@ function addFallbacks(selectedGirls: Girl[], plan: SkillPlan): SkillPlan {
 
             const cost = missingSkills.reduce((total, skill) =>
                 total + skills[skill].cost, 0)
+
+            if (cost > safePoints) {
+                continue
+            }
 
             plan[event.id] ??= []
 

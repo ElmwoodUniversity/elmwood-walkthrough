@@ -31,6 +31,9 @@ lydia.addChoices(
         'e2lysex3',
         'e2lysex4',
         'e2lysexsquirt',
+        'e4bjcomp2',
+        'e4pole1',
+        'e4postelsex1', // "I cuddled Lydia after fucking Ella."
     ].map(id => selectChoice(id)),
 )
 

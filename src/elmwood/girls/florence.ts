@@ -20,6 +20,8 @@ florence.addChoices(
         'e3flofli1',
         'e3flofli3',
         'e3flofli3a',
+        'e4cereal2',
+        'e4floflowers2',
     ].map(id => selectChoice(id)),
 )
 
@@ -48,5 +50,10 @@ florence.addSkillRequirements(
         skill: 'Lie Detection',
         neededBy: 'e3b',
         priority: SkillPriority.BONUS,
+    },
+    {
+        skill: 'Persuasion',
+        neededBy: 'e4b',
+        priority: SkillPriority.RECOMMENDED,
     },
 )

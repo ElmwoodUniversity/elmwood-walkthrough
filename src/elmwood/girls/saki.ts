@@ -27,6 +27,13 @@ saki.addChoices(
         'e3sakibanana1',
         'e3sakibanana1a',
         'e3sakicorruption',
+        'e4saki1',
+        'e4saki3',
+        'e4saki4',
+        'e4sacorrupt',
+        'e4safinger',
+        'e4saownership',
+        'e4sacumx',
     ].map(id => selectChoice(id)),
 )
 
@@ -34,6 +41,21 @@ saki.addSkillRequirements(
     {
             skill: 'Corruption',
             neededBy: 'e3b',
-            priority: SkillPriority.REQUIRED,
+            priority: SkillPriority.STRONGLY_RECOMMENDED,
+    },
+    {
+            skill: 'Corruption',
+            neededBy: 'e4b',
+            priority: SkillPriority.STRONGLY_RECOMMENDED,
+    },
+    {
+            skill: 'Dexterity',
+            neededBy: 'e4b',
+            priority: SkillPriority.RECOMMENDED,
+    },
+    {
+            skill: 'Ownership',
+            neededBy: 'e4b',
+            priority: SkillPriority.RECOMMENDED,
     },
 )

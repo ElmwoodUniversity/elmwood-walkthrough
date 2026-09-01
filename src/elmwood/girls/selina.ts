@@ -20,5 +20,6 @@ selina.addChoices(
         'e3stalk4a',
         'e3stalk5',
         'e3ssex',
+        'e4selina2',
     ].map(id => selectChoice(id)),
 )

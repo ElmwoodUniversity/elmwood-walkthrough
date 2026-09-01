@@ -27,6 +27,20 @@ naomi.addChoices(
         'e3nstudy7b',
         'e3nkiss',
         'e3nkissx',
+        'e4flec3',
+        'e4flec8',
+        'e4naomi11b',
+        'e4naomi1d',
+        'e4naomi2b',
+        'e4naomi4a',
+        'e4naomi5a',
+        'e4naomi6',
+        'e4naomi7',
+        'e4naomipa',
+        'e4naomis',
+        'e4naomily',
+        'e4naomiel',
+        'e4naomich',
     ].map(id => selectChoice(id)),
 )
 
@@ -59,6 +73,16 @@ naomi.addSkillRequirements(
     {
         skill: 'Lie Detection',
         neededBy: 'e3b',
+        priority: SkillPriority.RECOMMENDED,
+    },
+    {
+        skill: 'Persuasion',
+        neededBy: 'e4b',
+        priority: SkillPriority.RECOMMENDED,
+    },
+    {
+        skill: 'Deception',
+        neededBy: 'e4b',
         priority: SkillPriority.RECOMMENDED,
     },
 )

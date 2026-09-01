@@ -28,5 +28,10 @@ katie.addChoices(
         'e3kttalk2b',
         'e3kttalk4b',
         'e3ktkisshug',
+        'e4kttext',
+        'e4ktcall1a',
+        'e4ktcall1b',
+        'e4ktcall1bvi',
+        'e4ktcall1c',
     ].map(id => selectChoice(id)),
 )

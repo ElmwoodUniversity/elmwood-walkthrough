@@ -22,6 +22,7 @@ chelsea.addChoices(
         'e1chbye1',
         'e1chbye1a',
         'e1leaveparty3',
+        'e1chsex2', // ch_fucked = True
         'e1chforeplay2',
         'e2lytext',
         'e2lytext2',
@@ -41,5 +42,7 @@ chelsea.addChoices(
         'e3ddate11a',
         'e3ddate90',
         'e3ddate110',
+        'e4bjcomp2',
+        'e4pole1',
     ].map(id => selectChoice(id)),
 )

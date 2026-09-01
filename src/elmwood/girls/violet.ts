@@ -14,5 +14,10 @@ violet.addChoices(
         'e2vilakechat',
         'e2vilove',
         'e2lighthouse1',
+        'e4vitext',
+        'e4vi2a',
+        'e4vi4',
+        'e4vi7',
+        'e4vikiss',
     ].map(id => selectChoice(id)),
 )

@@ -39,7 +39,17 @@ ella.addChoices(
         'e2eldategym',
         'e2eldatemenu3',
         'e2eldateflirt',
-        'e2elaftersex1',
+        'e2elaftersex1', // el_fucked = True
+        'e4bjcomp2',
+        'e4pole1',
+        'e4ellatalk',
+        'e4ellatalk1b',
+        'e4ellatalk1bx',
+        'e4ellatalk1d',
+        'e4ellatalk2',
+        'e4ellatalk3',
+        'e4eldate',
+        'e4elsex',
     ].map(id => selectChoice(id)),
 )
 

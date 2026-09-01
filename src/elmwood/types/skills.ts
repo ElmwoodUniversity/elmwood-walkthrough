@@ -1,4 +1,4 @@
-import { Girl } from '@/elmwood/elmwood.ts'
+import { Choice, Girl } from '@/elmwood/elmwood.ts'
 import type { ChoiceOptions } from '@/elmwood/types/choices.ts'
 
 export type SkillName =
@@ -20,7 +20,7 @@ export interface Skill {
 }
 
 export enum SkillPriority {
-    BONUS,
+    BONUS = 1,
     RECOMMENDED,
     STRONGLY_RECOMMENDED,
     REQUIRED
@@ -28,10 +28,9 @@ export enum SkillPriority {
 
 export type SkillPointId =
     | 'e1'
-    | 'e2a'
-    | 'e2b'
-    | 'e3a'
-    | 'e3b'
+    | 'e2a' | 'e2b'
+    | 'e3a' | 'e3b'
+    | 'e4a' | 'e4b'
 
 export interface SkillPointEvent {
     id: SkillPointId
@@ -48,6 +47,7 @@ export type SkillPlan = Partial<Record<SkillPointId, SkillName[]>>
 
 export interface WalkthroughState {
     skillPlan: SkillPlan
+    shownChoices: Choice[]
 }
 
 export type SkillChoice = (selectedGirls: Girl[]) => SkillRequirement[]

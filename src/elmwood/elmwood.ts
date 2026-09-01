@@ -8,6 +8,7 @@ import type {
     WalkthroughState,
 } from '@/elmwood/types/skills.ts'
 import type { ChoiceOptions, ChoiceSkill, ShowChoice } from '@/elmwood/types/choices.ts'
+import { type GirlName, GirlStat } from '@/elmwood/types/girls.ts'
 
 
 export const skillPointEvents: SkillPointEvent[] = [
@@ -16,17 +17,19 @@ export const skillPointEvents: SkillPointEvent[] = [
     { id: 'e2b', points: 10 },
     { id: 'e3a', points: 20 },
     { id: 'e3b', points: 20 },
+    { id: 'e4a', points: 20 },
+    { id: 'e4b', points: 10 },
 ]
 
 export class Girl {
-    public shortName: string
+    public shortName: GirlName
     public longName: string
     public colour: string
     public choices: Choice[] = []
     public skillRequirements: SkillRequirement[] = []
     public skillRequirementPredicate: SkillChoice|undefined
 
-    constructor(shortName: string, longName: string, colour: string) {
+    constructor(shortName: GirlName, longName: string, colour: string) {
         this.shortName = shortName
         this.longName = longName
         this.colour = colour
@@ -59,15 +62,15 @@ export class Girl {
         return this.skillRequirements
     }
 
-    public static listIncludes(list: Girl[], ...names: string[]): boolean {
+    public static listIncludes(list: Girl[], ...names: GirlName[]): boolean {
         return names.every(name => list.map(girl => girl.shortName).includes(name))
     }
 
-    public static listIncludesAny(list: Girl[], ...names: string[]): boolean {
+    public static listIncludesAny(list: Girl[], ...names: GirlName[]): boolean {
         return names.some(name => list.map(girl => girl.shortName).includes(name))
     }
 
-    public static listIncludesNone(list: Girl[], ...names: string[]): boolean {
+    public static listIncludesNone(list: Girl[], ...names: GirlName[]): boolean {
         return names.every(name => !list.map(girl => girl.shortName).includes(name))
     }
 }

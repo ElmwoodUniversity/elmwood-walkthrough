@@ -32,5 +32,6 @@ paris.addChoices(
         'e3padate10',
         'e3padate10a',
         'e3padate12',
+        'e4patext1',
     ].map(id => selectChoice(id)),
 )

@@ -16,18 +16,24 @@ chloe.addChoices(
         'e3ctalk',
         'e3ctalk2',
         'e3ctalk7',
+        'e4ctext',
+        'e4joey2saki',
+        'e4joey3a',
+        'e4joey3b',
+        'e4joey3c',
+        'e4joey4',
     ].map(id => selectChoice(id)),
 )
 
 chloe.addSkillRequirements(
     {
-            skill: 'Dexterity',
-            neededBy: 'e3a',
-            priority: SkillPriority.REQUIRED,
+        skill: 'Dexterity',
+        neededBy: 'e3a',
+        priority: SkillPriority.REQUIRED,
     },
     {
-            skill: 'Oral Mastery',
-            neededBy: 'e3a',
-            priority: SkillPriority.BONUS,
+        skill: 'Oral Mastery',
+        neededBy: 'e3a',
+        priority: SkillPriority.BONUS,
     },
 )
