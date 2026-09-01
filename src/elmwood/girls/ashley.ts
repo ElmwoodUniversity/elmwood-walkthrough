@@ -6,6 +6,7 @@ export const ashley = new Girl('Ashley', 'Ashley Berry', 'ashley')
 
 ashley.addChoices(
     ...[
+        'e1leaveparty1',
         'twinsmeet1',
         'twinsmeet1y',
         'twinsmeet8d',
@@ -14,6 +15,7 @@ ashley.addChoices(
         'e2tashleyyoga2a',
         'e2twinyogacomp1',
         'e2twinyogacomp2',
+        'e2postpatext',
         'e2td1',
         'e2ashneck',
         'e2ashnecklong',

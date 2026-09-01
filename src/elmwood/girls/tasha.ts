@@ -6,6 +6,7 @@ export const tasha = new Girl('Tasha', 'Tasha Berry', 'tasha')
 
 tasha.addChoices(
     ...[
+        'e1leaveparty1',
         'twinsmeet1',
         'twinsmeet1y',
         'twinsmeet8d',
@@ -14,6 +15,7 @@ tasha.addChoices(
         'e2tashleyyoga2a',
         'e2twinyogacomp1',
         'e2twinyogacomp2',
+        'e2postpatext',
         'e2td1',
         'e2ashneck',
         'e2ashnecklong',

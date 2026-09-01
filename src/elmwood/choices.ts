@@ -110,6 +110,7 @@ export const choices: Choice[] = [
     new Choice('Then take me to bed', 'e1chbye1', 1, (girls, { includeUnselectedForScenes }) => isPrerequisite(girls, includeUnselectedForScenes, 'Chelsea', 'Ella')),
     new Choice('I wish we had some time alone', 'e1chbye1a', 1, (girls, { includeUnselectedForScenes }) => Girl.listIncludes(girls, 'Lydia') && isPrerequisite(girls, includeUnselectedForScenes, 'Chelsea', 'Ella')),
     new Choice('Walk home with Chelsea', 'e1leaveparty3', 1, (girls, { includeUnselectedForScenes }) => isPrerequisite(girls, includeUnselectedForScenes, 'Chelsea', 'Ella')),
+    new Choice('Walk home alone', 'e1leaveparty1', 1, 'Taking Chelsea home causes problems for the twins.', girls => Girl.listIncludesNone(girls, 'Chelsea') && Girl.listIncludesAny(girls, 'Ashley', 'Tasha')),
     new Choice('Compliment her', 'e1chsex2', 1, 'Chelsea love +1'),
     new Choice('Eat her pussy', 'e1chforeplay2', 1, 'Chelsea love +1'),
     // Episode 2 Choices
@@ -138,6 +139,7 @@ export const choices: Choice[] = [
     new Choice('Make her even more jealous', 'e2eltalk4a', 2, 'Ella love +2, lust +1', (girls, { includeUnselectedForScenes }) => hasPrerequisite(girls, includeUnselectedForScenes, 'Lydia', 'Chelsea')),
     new Choice('Ask her out on a date', 'e2eltalk5b', 2, (girls, { includeUnselectedForScenes }) => hasPrerequisite(girls, includeUnselectedForScenes, 'Lydia', 'Chelsea')),
     new Choice('Ask Paris out on a date', 'e2patext1', 2),
+    new Choice('Don\'t text Paris', 'e2postpatext', 2, girls => Girl.listIncludesNone(girls, 'Paris') && Girl.listIncludesAny(girls, 'Ashley', 'Tasha')),
     new Choice('Flirt', 'e2patext1a', 2),
     new Choice('Thanks, Tasha', 'e2td1', 2, 'Twins love +1'),
     new Choice('Truth', 'e2tdtruth1', 2, 'Saki & Molly love +1', girls => Girl.listIncludesAny(girls, 'Saki', 'Molly') && Girl.listIncludes(girls, 'Lydia')),
