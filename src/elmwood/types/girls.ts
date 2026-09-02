@@ -19,7 +19,7 @@ type PrimaryGirl =
     | 'Violet'
 
 type SideGirl =
-    | 'Katherine'
+    | 'Kat'
     | 'Vivian'
 
 export type GirlName = PrimaryGirl | SideGirl

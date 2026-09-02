@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Girl } from '@/elmwood/elmwood.ts'
 import { choices } from '@/elmwood/choices.ts'
-import { girls } from '@/elmwood/girls'
+import { girls, sideGirls } from '@/elmwood/girls'
 import type { ChoiceOptions } from '@/elmwood/types/choices.ts'
 import { computed, ref } from 'vue'
 import Episode from '@/components/Episode.vue'
@@ -51,6 +51,8 @@ const preloadedClasses = [
   'text-taylor',
   'text-veronika',
   'text-violet',
+  'text-kat',
+  'text-vivian',
 ]
 </script>
 
@@ -76,6 +78,13 @@ const preloadedClasses = [
         <p class="text-lg border-b border-white text-white mb-2">Girls</p>
         <ul class="mb-4">
           <li v-for="girl in girls" @click="toggleGirl(girl)" class="cursor-pointer"
+              :class="{ 'font-bold': isSelectedGirl(girl), [`text-${girl.colour}`]: isSelectedGirl(girl) }">
+            {{ girl.shortName }}
+          </li>
+        </ul>
+        <p class="text-lg border-b border-white text-white mb-2">Side Girls</p>
+        <ul class="mb-4">
+          <li v-for="girl in sideGirls" @click="toggleGirl(girl)" class="cursor-pointer"
               :class="{ 'font-bold': isSelectedGirl(girl), [`text-${girl.colour}`]: isSelectedGirl(girl) }">
             {{ girl.shortName }}
           </li>

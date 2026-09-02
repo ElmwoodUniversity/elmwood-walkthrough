@@ -17,6 +17,9 @@ import { taylor } from './taylor'
 import { veronika } from './veronika'
 import { violet } from './violet'
 
+import { katherine } from '@/elmwood/girls/katherine.ts'
+import { vivian } from '@/elmwood/girls/vivian.ts'
+
 export const girls = [
     ashley,
     chelsea,
@@ -36,4 +39,9 @@ export const girls = [
     taylor,
     veronika,
     violet,
+]
+
+export const sideGirls = [
+    katherine,
+    vivian,
 ]
