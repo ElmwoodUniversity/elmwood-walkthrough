@@ -1,5 +1,6 @@
 import { Girl } from '@/elmwood/elmwood.ts'
 import { selectChoice } from '@/elmwood/choices.ts'
+import { SkillPriority } from '@/elmwood/types/skills.ts'
 
 export const paris = new Girl('Paris', 'Paris Carter', 'paris')
 
@@ -33,5 +34,17 @@ paris.addChoices(
         'e3padate10a',
         'e3padate12', // "We got intimate with each other." & "We had a great date!"
         'e4patext1', // "I texted her and we talked about going on a second date."
+        'e5patext1', // "We arranged a second date."
+        'e5papresex1',
+        'e5pafingerslow',
+        'e5parisquake', // e5parisquake = True, "We fucked so hard that Molly and Saki orgasmed with the earthquake!"
     ].map(id => selectChoice(id)),
+)
+
+paris.addSkillRequirements(
+    {
+            skill: 'Earthquake',
+            neededBy: 'e5b',
+            priority: SkillPriority.BONUS,
+    },
 )

@@ -19,6 +19,8 @@ export const skillPointEvents: SkillPointEvent[] = [
     { id: 'e3b', points: 20 },
     { id: 'e4a', points: 20 },
     { id: 'e4b', points: 10 },
+    { id: 'e5a', points: 15 },
+    { id: 'e5b', points: 15 },
 ]
 
 export class Girl {

@@ -62,7 +62,13 @@ tasha.addChoices(
         'e4montash6', // "We cuddled and fell asleep together."
         'e4halloleave1a',
         'e4halloleave1b', // "I knocked Lewis out." (else "I threatened Lewis.")
+        // "We shared strong feelings for each other." if no Paris or Chelsea
         'e4witchdecision', // "I choose the cuddles and romance."
+        'e5tashleytalk',
+        'e5tashleytalk1x',
+        'e5tashleytalk2',
+        'e5tashleytalk2y', // "I asked her out on a date."
+        'e5ashleydate2', // "We cuddled and fell asleep together after Helixx."
     ].map(id => selectChoice(id)),
 )
 

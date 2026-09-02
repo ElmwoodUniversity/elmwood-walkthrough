@@ -45,6 +45,13 @@ naomi.addChoices(
         'e4naomily', // "I told her about Lydia."
         'e4naomiel', // "I told her about Ella."
         'e4naomich', // "I told her about Chelsea.", "We kissed and dry humped while I told her about my experiences."
+        'e5ntalk1',
+        'e5naomiplay', // "We made out and exchanged answers after the exam."
+        'e5naomiplay1',
+        'e5naomicuck', // "I treated her like a cuckquean and told her other girls are hotter."
+        'e5naomiplaynocuck', // "I reassured her that she was just as hot as other girls."
+        'e5naomicuck2',
+        'e5naomicuckfinger',
     ].map(id => selectChoice(id)),
 )
 
@@ -88,5 +95,10 @@ naomi.addSkillRequirements(
         skill: 'Deception',
         neededBy: 'e4b',
         priority: SkillPriority.RECOMMENDED,
+    },
+    {
+        skill: 'Oral Mastery',
+        neededBy: 'e5b',
+        priority: SkillPriority.BONUS,
     },
 )

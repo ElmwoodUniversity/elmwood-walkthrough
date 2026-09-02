@@ -34,28 +34,46 @@ saki.addChoices(
         'e4safinger', // "I fingered her."
         'e4saownership', // "I taught her that I own her orgasms."
         'e4sacumx',
+        'e5saki3',
+        'e5saki3a',
+        'e5saki4a',
+        'e5saki4b', // "I corrupted her and let her suck my dick."
+        'e5sakiobedience',
+        'e5sakiobedience2', // "I trained her to kneel on command."
+        'e5sakiobedience3a', // "I gave her permission to touch herself and cum."
+        'e5sakiobedience3a', // "I didn't give her my permission to cum."
     ].map(id => selectChoice(id)),
 )
 
 saki.addSkillRequirements(
     {
-            skill: 'Corruption',
-            neededBy: 'e3b',
-            priority: SkillPriority.STRONGLY_RECOMMENDED,
+        skill: 'Corruption',
+        neededBy: 'e3b',
+        priority: SkillPriority.STRONGLY_RECOMMENDED,
     },
     {
-            skill: 'Corruption',
-            neededBy: 'e4b',
-            priority: SkillPriority.STRONGLY_RECOMMENDED,
+        skill: 'Corruption',
+        neededBy: 'e4b',
+        priority: SkillPriority.STRONGLY_RECOMMENDED,
     },
     {
-            skill: 'Dexterity',
-            neededBy: 'e4b',
-            priority: SkillPriority.RECOMMENDED,
+        skill: 'Dexterity',
+        neededBy: 'e4b',
+        priority: SkillPriority.RECOMMENDED,
     },
     {
-            skill: 'Ownership',
-            neededBy: 'e4b',
-            priority: SkillPriority.RECOMMENDED,
+        skill: 'Ownership',
+        neededBy: 'e4b',
+        priority: SkillPriority.RECOMMENDED,
+    },
+    {
+        skill: 'Corruption',
+        neededBy: 'e5b',
+        priority: SkillPriority.STRONGLY_RECOMMENDED,
+    },
+    {
+        skill: 'Ownership',
+        neededBy: 'e5b',
+        priority: SkillPriority.RECOMMENDED,
     },
 )

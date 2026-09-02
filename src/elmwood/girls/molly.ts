@@ -19,6 +19,8 @@ molly.addChoices(
         'e2ordervibrator2', // "I ordered a copy of my dick as a vibrator for her!"
         'e4dd2', // "I shut down her bratty behaviour and didn't let her shout at me."
         'e4cook2', // "I cooked dinner for her."
+        'e5molly1b', // "She apologised and we cooked together."
+        'e5cook4a', // "I helped her wash up."
     ].map(id => selectChoice(id)),
 )
 

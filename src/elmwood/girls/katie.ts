@@ -33,5 +33,10 @@ katie.addChoices(
         'e4ktcall1b',
         'e4ktcall1bvi', // "I encouraged her to keep Violet's secret."
         'e4ktcall1c', // "We agreed to have a picnic."
+        'e5ktpicnic2',
+        'e5ktpicnic3b',
+        'e5ktpicnic3d',
+        'e5ktpicnic6',
+        'e5ktpicnic7', // "We had a great date and I stayed over."
     ].map(id => selectChoice(id)),
 )

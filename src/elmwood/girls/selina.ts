@@ -1,5 +1,6 @@
 import { Girl } from '@/elmwood/elmwood.ts'
 import { selectChoice } from '@/elmwood/choices.ts'
+import { SkillPriority } from '@/elmwood/types/skills.ts'
 
 export const selina = new Girl('Selina', 'Selina Nelson', 'selina')
 
@@ -21,5 +22,17 @@ selina.addChoices(
         'e3stalk5',
         'e3ssex',
         'e4selina2', // "She sent me nudes."
+        'e5selinatext', // "We studied together and had sex in my room."
+        'e5selinatext1', // "You rejected her."
+        'e5selina1a',
+        'e5selinaquake', // e5selinaquake = True, "We fucked so hard that Molly, Saki, Tasha & Ashley orgasmed with the earthquake!"
     ].map(id => selectChoice(id)),
+)
+
+selina.addSkillRequirements(
+    {
+            skill: 'Earthquake',
+            neededBy: 'e5b',
+            priority: SkillPriority.BONUS,
+    }
 )

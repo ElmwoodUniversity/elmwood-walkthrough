@@ -22,6 +22,9 @@ chloe.addChoices(
         'e4joey3b',
         'e4joey3c',
         'e4joey4', // "We had a great time!"
+        'e5ctext1', // "We arranged to go for drinks."
+        'e5joeydrinks',
+        'e5joskate4', // "We had a threesome for Chloe's birthday!", "Chloe seemed to be jealous that I made Jordan cum."
     ].map(id => selectChoice(id)),
 )
 

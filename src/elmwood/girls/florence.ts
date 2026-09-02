@@ -22,6 +22,11 @@ florence.addChoices(
         'e3flofli3a', // "We flirted and I was very charming."
         'e4cereal2',
         'e4floflowers2', // "I decided to pursue Florence despite her boyfriend.", "I gave her some pink roses."
+        'e5vlec2a', // courserep = True
+        'e5flooffice2',
+        'e5flooffice2a',
+        'e5flooffice2x',
+        'e5flooffice4', // "We flirted and I massaged her head and shoulders!"
     ].map(id => selectChoice(id)),
 )
 
@@ -54,6 +59,26 @@ florence.addSkillRequirements(
     {
         skill: 'Persuasion',
         neededBy: 'e4b',
+        priority: SkillPriority.RECOMMENDED,
+    },
+    {
+        skill: 'Scholar',
+        neededBy: 'e5a',
+        priority: SkillPriority.STRONGLY_RECOMMENDED,
+    },
+    {
+        skill: 'Persuasion',
+        neededBy: 'e5a',
+        priority: SkillPriority.STRONGLY_RECOMMENDED,
+    },
+    {
+        skill: 'Lie Detection',
+        neededBy: 'e5b',
+        priority: SkillPriority.BONUS,
+    },
+    {
+        skill: 'MILF Enjoyer',
+        neededBy: 'e5b',
         priority: SkillPriority.RECOMMENDED,
     },
 )

@@ -27,6 +27,11 @@ taylor.addChoices(
         'e4tay3b',
         'e4tay3c', // "I told her that I met Milo."
         'e4tay5',
+        'e5taytext', // "We arranged to have coffee."
+        'e5taycoffee3', // "She asked me to write to her.", "We arranged a lunch date."
+        'e5taydate2',
+        'e5taydate4c',
+        'e5taydate8', // "We kissed!"
     ].map(id => selectChoice(id)),
 )
 
@@ -35,6 +40,11 @@ taylor.addSkillRequirements(
     {
             skill: 'Lie Detection',
             neededBy: 'e4b',
+            priority: SkillPriority.BONUS,
+    },
+    {
+            skill: 'Lie Detection',
+            neededBy: 'e5b',
             priority: SkillPriority.BONUS,
     },
 )

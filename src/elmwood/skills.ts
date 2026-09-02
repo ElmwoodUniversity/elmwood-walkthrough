@@ -232,7 +232,9 @@ function addFallbacks(selectedGirls: Girl[], plan: SkillPlan): SkillPlan {
                 total + skills[skill].cost, 0)
 
             if (cost > safePoints) {
-                continue
+                // break = unlock fallback skills in order
+                // continue = always unlock next affordable fallback skill
+                break
             }
 
             plan[event.id] ??= []

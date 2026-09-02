@@ -2,6 +2,7 @@ import { Girl, Choice, skillPointEvents } from '@/elmwood/elmwood.ts'
 import type { SkillName, SkillPlan, SkillPointId } from '@/elmwood/types/skills.ts'
 import { skills } from '@/elmwood/skills.ts'
 import { type GirlName } from '@/elmwood/types/girls.ts'
+import type { ShowChoice } from '@/elmwood/types/choices.ts'
 
 const noImpact: string = 'This choice has no impact.'
 const firstKiss: string = 'Your first kiss only matters for the Harem Wars minigame.'
@@ -18,6 +19,15 @@ const hasChoices = (shownChoices: Choice[], ...ids: string[]): boolean =>
     ids.every(id => shownChoices.map(ch => ch.optionId).includes(id))
 const hasChoicesOr = (shownChoices: Choice[], ...ids: string[]) =>
     ids.some(id => shownChoices.map(ch => ch.optionId).includes(id))
+
+const req = {
+    skill: (skillName: SkillName, by: SkillPointId): ShowChoice => (_, __, { skillPlan }) => hasSkill(skillName, by, skillPlan),
+    noSkill: (skillName: SkillName, by: SkillPointId): ShowChoice => (_, __, { skillPlan }) => !hasSkill(skillName, by, skillPlan),
+    choices: (...ids: string[]): ShowChoice => (_, __, { shownChoices }) => hasChoices(shownChoices, ...ids),
+    choicesOr: (...ids: string[]): ShowChoice => (_, __, { shownChoices }) => hasChoicesOr(shownChoices, ...ids),
+    noChoices: (...ids: string[]): ShowChoice => (_, __, { shownChoices }) => !hasChoicesOr(shownChoices, ...ids),
+    skillAndChoices: (skillName: SkillName, by: SkillPointId, ...ids: string[]): ShowChoice => (_, __, { shownChoices, skillPlan }) => hasChoices(shownChoices, ...ids) && hasSkill(skillName, by, skillPlan),
+}
 
 function addSkills(episode: number, event: SkillPointId): Choice[] {
     return Object.values(skills).map(({ name }) =>
@@ -373,6 +383,7 @@ export const choices: Choice[] = [
     new Choice('Buy Florence flowers', 'e4floflowers2', 4, 'Dr. Riley love +4', (_, __, { shownChoices }) => hasChoices(shownChoices, 'e3flofli3a')),
     new Choice('Text Katie', 'e4kttext', 4),
     // TODO: Check if HW tournament offers any love in the future
+    new Choice('Sign me up!', 'e4vi2', 4),
     new Choice('Flirt', 'e4vi2a', 4, 'Violet love +4, lust +1'),
     new Choice('It looks cool!', 'e4vi4', 4, 'Violet love +1'),
     new Choice('Steal her controller (Flirt)', 'e4vi7', 4),
@@ -408,6 +419,82 @@ export const choices: Choice[] = [
     new Choice('Compliment her', 'e4eldate', 4, (_, __, { shownChoices }) => hasChoices(shownChoices, 'e4ellatalk3')),
     new Choice('Fuck Ella', 'e4elsex', 4, (_, __, { shownChoices }) => hasChoices(shownChoices, 'e4ellatalk3')),
     new Choice('Cuddle Lydia', 'e4postelsex1', 4, (_, __, { shownChoices }) => hasChoices(shownChoices, 'e4elsex')), // TODO: Check if this is required for any future Lydia content and add a `includeUnselectedForScenes` check
+    // Episode 5
+    ...addSkills(5, 'e5a'),
+    new Choice('Make sure everyone has a voice', 'e5vlec2a', 5, (girls, __, { shownChoices, skillPlan }) => hasChoices(shownChoices, 'e4cereal2') && hasSkill('Persuasion', 'e5a', skillPlan) || (hasSkill('Scholar', 'e5a', skillPlan) && Girl.listIncludes(girls, 'Naomi'))),
+    ...addSkills(5, 'e5b'),
+    new Choice('(Flirt)', 'e5ntalk1', 5, req.choices('e3nkiss')),
+    new Choice('Hear him out', 'e5ethan1', 5),
+    new Choice('Yes, I\'m interested', 'e5ethan4', 5),
+    new Choice('Warn Taylor', 'e5taytext', 5),
+    new Choice('(Cuddle her)', 'e5saki3', 5, req.choices('e3sakibanana1')),
+    new Choice('Kiss her', 'e5saki3a', 5, req.choices('e3sakibanana1')),
+    new Choice('Go further', 'e5saki4a', 5, 'Saki lust +1', (_, __, { shownChoices, skillPlan }) => hasChoices(shownChoices, 'e3sakibanana1') && !hasSkill('Corruption', 'e5b', skillPlan)),
+    new Choice('Go further & corrupt her', 'e5saki4b', 5, 'Saki lust +1', req.skillAndChoices('Corruption', 'e5b', 'e3sakibanana1')),
+    new Choice('Extra training', 'e5sakiobedience', 5, 'The order of the commands don\'t matter, as long as you do at least 6', req.choices('e5saki4b')),
+    new Choice('(Continue)', 'e5sakiobedience2', 5, req.choices('e5sakiobedience')),
+    new Choice('Give her permission', 'e5sakiobedience3a', 5, req.skillAndChoices('Ownership', 'e5b', 'e5sakiobedience2')),
+    new Choice('Don\'t let her cum', 'e5sakiobedience3b', 5, req.skillAndChoices('Ownership', 'e5b', 'e5sakiobedience2')),
+    new Choice('Let\'s do it', 'e5vitext1', 5, req.choices('e4vikiss')),
+    new Choice('Ask her out', 'e5taycoffee3', 5, req.choices('e5taytext')),
+    new Choice('I\'ll be there', 'e5selinatext', 5, girls => !Girl.listIncludesAny(girls, 'Ashley', 'Tasha')),
+    new Choice('I\'m busy', 'e5selinatext1', 5, 'Seeing Selina here ends the path with the Twins', girls => Girl.listIncludesAny(girls, 'Ashley', 'Tasha')),
+    new Choice('Suck on her nipple', 'e5selina1a', 5, 'Selina lust +1', req.choices('e5selinatext')),
+    new Choice('Earthquake', 'e5selinaquake', 5, req.skillAndChoices('Earthquake', 'e5b', 'e5selinatext')),
+    new Choice('I\'m free', 'e5ctext1', 5, req.choices('e4joey4')),
+    new Choice('Apologise and we have a deal', 'e5molly1b', 5, req.choices('e4cook2')),
+    new Choice('Help her wash up', 'e5cook4a', 5, 'Molly love +1', req.choices('e5molly1b')),
+    // TODO: add exam answers to Naomi/Florence/Veronika as needed
+    new Choice('C', 'e5exam1c', 5, (_, __, { shownChoices }) => !hasChoices(shownChoices, 'e2infiltration1')),
+    new Choice('C', 'e5exam2', 5, req.choices('e5exam1c')),
+    new Choice('FALSE', 'e5exam3', 5, req.choices('e5exam1c')),
+    new Choice('TRUE', 'e5exam4', 5, req.choices('e5exam1c')),
+    new Choice('A', 'e5exam5', 5, req.choices('e5exam1c')),
+    new Choice('D', 'e5exam6', 5, req.choices('e5exam1c')),
+    new Choice('Hang out with Naomi', 'e5naomiplay', 5, req.choices('e3nkiss')),
+    new Choice('Go further', 'e5naomiplay1', 5, 'Naomi lust +1', req.choices('e5naomiplay')),
+    new Choice('I\'ve had better', 'e5naomicuck', 5, 'Naomi lust +3', req.choicesOr('e4naomis', 'e4naomily', 'e4naomiel', 'e4naomich')),
+    new Choice('Yours is great', 'e5naomiplaynocuck', 5, req.noChoices('e5naomicuck')),
+    new Choice('Lay back, (Selina/Lydia/Ella/Chelsea)', 'e5naomicuck2', 5, 'Naomi lust +2', req.choices('e5naomicuck')),
+    new Choice('Finger her', 'e5naomicuckfinger', 5, req.choices('e5naomicuck2')),
+    new Choice('Text Paris', 'e5patext1', 5, req.choices('e4patext1')),
+    new Choice('Your relationship with Atkins', 'e5floffice1a', 5, req.choices('e5vlec2a')),
+    new Choice('Flirt', 'e5floffice1x', 5, req.skillAndChoices('MILF Enthusiast', 'e5b', 'e5floffice1a')),
+    new Choice('Make conversation', 'e5floffice2a', 5, req.choices('e5vlec2a')),
+    new Choice('Flirt', 'e5floffice2x', 5, 'Dr. Riley love +1', req.skillAndChoices('MILF Enjoyer', 'e5b', 'e5floffice2a')),
+    new Choice('Visit Tasha & Ashley', 'e5tashleytalk', 5),
+    new Choice('Ashley red, Tasha blue', 'e5tashleytalk1x', 5),
+    new Choice('You\'re lying', 'e5tashleytalk2', 5),
+    new Choice('Ask them out on a date', 'e5tashleytalk2y', 5, (girls, _, { shownChoices }) => (Girl.listIncludesNone(girls, 'Chelsea', 'Paris') && hasChoices(shownChoices, 'e4halloleave1b')) || hasChoices(shownChoices, 'e4witchdecision')),
+    // TODO: HW tournament sign up here if important
+    new Choice('Let\'s go.', 'e5viflat10', 5, req.choices('e4vi2')),
+    new Choice('Be defensive', 'e5tournament1a', 5, 'Violet love +2', req.choices('e5viflat10')),
+    new Choice('(Continue)', 'e5joeydrinks', 5, 'Just do not flirt', req.choices('e5ctext1')),
+    new Choice('Come back to mine?', 'e5papresex1', 5, 'Paris lust +3', req.choices('e5patext1')),
+    new Choice('Finger her', 'e5pafingerslow', 5, 'Paris lust +1', req.choices('e5papresex1')),
+    new Choice('Earthquake', 'e5parisquake', 5, req.skillAndChoices('Earthquake', 'e5b', 'e5papresex1')),
+    new Choice('I\'ll do it', 'e5joskate4', 5, req.choices('e5joeydrinks')),
+    new Choice('Call Vivian', 'e5vivcall1', 5),
+    new Choice('About Time', 'e5ktpicnic2', 5, 'Katie love +2', req.choices('e4ktcall1c')),
+    new Choice('Loving & loyal', 'e5ktpicnic3b', 5, req.choices('e4ktcall1c')),
+    new Choice('Baking skills', 'e5ktpicnic3d', 5, req.choices('e4ktcall1c')),
+    new Choice('Kiss her', 'e5ktpicnic6', 5, req.choices('e4ktcall1c')),
+    new Choice('Stay over', 'e5ktpicnic7', 5, 'Katie love +1', req.choices('e4ktcall1c')),
+    new Choice('Skinny caramel latte', 'e5ashleydate2', 5, 'Twins love +1', req.choices('e5tashleytalk2y')),
+    new Choice('I\'ll train both of you', 'e5vivian2', 5, (_, __, { skillPlan }) => hasSkill('Corruption', 'e5b', skillPlan) && hasSkill('MILF Enjoyer', 'e5b', skillPlan)),
+    new Choice('I\'ll train Trixie', 'e5vivian9', 5, req.noChoices('e5vivian2')),
+    new Choice('Make conversation', 'e5flooffice2', 5, req.choices('e5vlec2a')),
+    new Choice('Ask about her Research', 'e5flooffice2a', 5, req.choices('e5flooffice2')),
+    new Choice('A study over a long period of time', 'e5flooffice2x', 5, 'Dr. Riley love +1', req.skillAndChoices('Deception', 'e5b', 'e5flooffice2')),
+    new Choice('Flirt', 'e5flooffice4', 5, 'Dr. Riley love +2', req.skillAndChoices('MILF Enjoyer', 'e5b', 'e5flooffice2')),
+    new Choice('Be direct and blunt', 'e5veronikaoffice1b', 5, req.choices('e5vlec2a')),
+    new Choice('Put her in her place', 'e5veronikaoffice2', 5, req.skillAndChoices('Corruption', 'e5b', 'e5vlec2a')),
+    new Choice('Agree with her', 'e5veronikaoffice2x', 5, (_, __, { shownChoices, skillPlan }) => hasChoices(shownChoices, 'e5vlec2a') && !hasSkill('Corruption', 'e5b', skillPlan)),
+    new Choice('We need 10 minutes', 'e5veronikaoffice3b', 5, req.choices('e5veronikaoffice2')),
+    new Choice('We need 15 minutes', 'e5veronikaoffice3c', 5, (_, __, { shownChoices, skillPlan }) => hasChoices(shownChoices, 'e5veronikaoffice2') && hasSkill('Ownership', 'e5b', skillPlan) && hasSkill('Dexterity', 'e5b', skillPlan)),
+    new Choice('...beautiful', 'e5taydate2', 5, 'Taylor love +1', req.choices('e5taycoffee3')),
+    new Choice('Ask about Selina', 'e5taydate4c', 5, 'Reveals Taylor\'s perk briefly', req.choices('e5taydate2')),
+    new Choice('Kiss her', 'e5taydate8', 5, req.choices('e5taydate2')),
 ]
 
 export const selectChoice = (id: string): Choice => {
@@ -429,4 +516,6 @@ export const conflictingChoices: Choice[][] = [
     ['e3massage1a', 'e3massage1b', 'e3massage1c', 'e3massage1d'].map(id => selectChoice(id)),
     ['e3padate1a', 'e3padate1c'].map(id => selectChoice(id)),
     ['e4vnom1c', 'e4vnom1d'].map(id => selectChoice(id)),
+    ['e5sakiobedience3a', 'e5sakiobedience3b'].map(id => selectChoice(id)),
+    ['e5ktpicnic3b', 'e5ktpicnic3d'].map(id => selectChoice(id)),
 ]

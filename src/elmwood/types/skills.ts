@@ -31,6 +31,7 @@ export type SkillPointId =
     | 'e2a' | 'e2b'
     | 'e3a' | 'e3b'
     | 'e4a' | 'e4b'
+    | 'e5a' | 'e5b'
 
 export interface SkillPointEvent {
     id: SkillPointId
