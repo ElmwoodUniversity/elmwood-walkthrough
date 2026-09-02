@@ -25,7 +25,6 @@ function addSkills(episode: number, event: SkillPointId): Choice[] {
     )
 }
 
-// TODO: Add visible choices to the predicate, allowing to easily check if a previous choice was shown
 export const choices: Choice[] = [
     // Episode 1 Choices
     new Choice('You have beautiful eyes.', 'intro3', 1, 'Katie love +1'),
