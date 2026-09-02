@@ -6,41 +6,45 @@ export const naomi = new Girl('Naomi', 'Naomi Edwards', 'naomi')
 
 naomi.addChoices(
     ...[
+        'e1chbye',
+        'e1chbye1',
+        'e1chbye1a',
+        'e1leaveparty3',
         'e2ntalkx1',
         'e2ntalkx1b',
         'e2ntalkx1scholar',
         'e2ntalk2',
         'e2nex',
         'e22tl',
-        'e2flecfinal',
+        'e2flecfinal', // "I had lunch with Naomi."
         'e2panswer1a',
         'e3flec1',
         'e3flec3',
-        'e3essay2',
+        'e3essay2', // e3nstudy = True
         'e3vlec9',
         'e3nstudy1a',
         'e3nstudy1b',
         'e3nstudy2',
         'e3nstudy2c',
         'e3nstudy2b',
-        'e3nstudy5c',
+        'e3nstudy5c', // "You reassured Naomi about her enthusiasm in class."
         'e3nstudy7b',
-        'e3nkiss',
+        'e3nkiss', // "We kissed!" / "Naomi was my first kiss!"
         'e3nkissx',
-        'e4flec3',
-        'e4flec8',
+        'e4flec3', // "We agreed to proofread each other's essays."
+        'e4flec8', // e4nstudy = True
         'e4naomi11b',
         'e4naomi1d',
-        'e4naomi2b',
-        'e4naomi4a',
-        'e4naomi5a',
+        'e4naomi2b', // "I thoroughly tested her knowledge for the exam."
+        'e4naomi4a', // "We made a romantic bet for the first exam."
+        'e4naomi5a', // "We flirted during our study session."
         'e4naomi6',
-        'e4naomi7',
-        'e4naomipa',
-        'e4naomis',
-        'e4naomily',
-        'e4naomiel',
-        'e4naomich',
+        'e4naomi7', // "I told her about my sexual experiences."
+        'e4naomipa', // "I told her about Paris."
+        'e4naomis', // "I told her about Selina."
+        'e4naomily', // "I told her about Lydia."
+        'e4naomiel', // "I told her about Ella."
+        'e4naomich', // "I told her about Chelsea.", "We kissed and dry humped while I told her about my experiences."
     ].map(id => selectChoice(id)),
 )
 

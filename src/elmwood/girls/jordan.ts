@@ -12,16 +12,16 @@ jordan.addChoices(
         'e1joeyshirt',
         'e1joeycontinue',
         'e1joey4',
-        'joey5',
+        'joey5', // "We became friends."
         'e3ctalk',
         'e3ctalk2',
         'e3ctalk7',
-        'e4ctext',
-        'e4joey2saki',
+        'e4ctext', // "We arranged to hang out at a sports bar."
+        'e4joey2saki', // "I asked Jordan about El Mysterioso."
         'e4joey3a',
         'e4joey3b',
         'e4joey3c',
-        'e4joey4',
+        'e4joey4', // "We had a great time!"
     ].map(id => selectChoice(id)),
 )
 

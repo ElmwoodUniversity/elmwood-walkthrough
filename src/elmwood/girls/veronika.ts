@@ -10,14 +10,14 @@ veronika.addChoices(
         'e2panswer1a',
         'e2panswer1b',
         'e2vertalk',
-        'e4cereal2',
+        'e4cereal2', // "I decided to nominate myself for course rep.", "I nominated myself for course rep."
         'e4vnom1b',
         'e4vnom1c',
         'e4vnom1d',
         'e4vnom2b',
         'e4vnom3e',
         'e4vnom3c',
-        'e4vnom4a',
+        'e4vnom4a', // "We talked about her research.", "We flirted!"
         'e4vnom4b',
     ].map(id => selectChoice(id)),
 )

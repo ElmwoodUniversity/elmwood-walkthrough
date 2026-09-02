@@ -7,16 +7,16 @@ export const ella = new Girl('Ella', 'Ella Davies', 'ella')
 ella.addChoices(
     ...[
         'cheertalk3',
-        'cheertalk4x',
+        'cheertalk4x', // "She essentially gave me a lap dance."
         'cheertalk7all',
         'cheertalk8n',
         'cheerkissel',
         'cheerkisse2',
         'chelbj4',
         'lydbj3',
-        'e1elbj1',
+        'e1elbj1', // "She sucked my dick in the bathroom!"
         'e1elbjcum',
-        'hotnaked1',
+        'hotnaked1', // e1hotnaked = True
         'hottub2e',
         'e1endhot2',
         'e1chbye',
@@ -28,28 +28,28 @@ ella.addChoices(
         'e2lysex3',
         'e2lysex4',
         'e2lysexsquirt',
-        'e2lysexwatch',
+        'e2lysexwatch', // "Ella watched me and Lydia have sex!"
         'e2eltalk1',
         'e2eltalk3c',
         'e2eltalk4a',
-        'e2eltalk5b',
+        'e2eltalk5b', // "Ella agreed to go on a date with me"
         'e2eldate0',
         'e2eldatemenu1',
         'e2eldatemenu2',
         'e2eldategym',
         'e2eldatemenu3',
-        'e2eldateflirt',
-        'e2elaftersex1', // el_fucked = True
-        'e4bjcomp2',
-        'e4pole1',
+        'e2eldateflirt', // "We had a great date!"
+        'e2elaftersex1', // el_fucked = True, "I told her she was better in bed than Lydia."
+        'e4bjcomp2', // "Lydia, Ella and Chelsea had a second BJ competition."
+        'e4pole1', // "We had a squirting lesson with Lydia & Chelsea.", "She couldn't squirt."
         'e4ellatalk',
         'e4ellatalk1b',
         'e4ellatalk1bx',
         'e4ellatalk1d',
         'e4ellatalk2',
         'e4ellatalk3',
-        'e4eldate',
-        'e4elsex',
+        'e4eldate', // "We went out to the cinema."
+        'e4elsex', // "We had sex while Lydia watched!"
     ].map(id => selectChoice(id)),
 )
 

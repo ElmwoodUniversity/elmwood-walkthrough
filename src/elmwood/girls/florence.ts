@@ -16,12 +16,12 @@ florence.addChoices(
         'e3flostx',
         'e3flostx2',
         'e3floof',
-        'e3flofli',
-        'e3flofli1',
+        'e3flofli', // "I discovered that she has a long distance boyfriend."
+        'e3flofli1', // "I learnt about her boyfriend."
         'e3flofli3',
-        'e3flofli3a',
+        'e3flofli3a', // "We flirted and I was very charming."
         'e4cereal2',
-        'e4floflowers2',
+        'e4floflowers2', // "I decided to pursue Florence despite her boyfriend.", "I gave her some pink roses."
     ].map(id => selectChoice(id)),
 )
 
