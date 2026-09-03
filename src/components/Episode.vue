@@ -26,7 +26,7 @@ const shownChoices = computed(() => {
 
 <template>
   <div class="col-span-12">
-    <h2 class="text-elmwood text-xl font-bold relative bg-background top-[14px] left-5 px-1 inline-block">Episode {{ episode }}</h2>
+    <h2 class="text-elmwood text-xl font-bold relative bg-background top-3.5 left-5 px-1 inline-block">Episode {{ episode }}</h2>
     <div class="grid grid-cols-12 rounded-3xl border-2 border-elmwood py-2">
       <template v-for="choice in shownChoices.filter(ch => ch.episode === episode)">
         <div v-if="choice.doShow(selectedGirls, choiceOptions, { skillPlan, shownChoices })" class="w-full flex justify-center"

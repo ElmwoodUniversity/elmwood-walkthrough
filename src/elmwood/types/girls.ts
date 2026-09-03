@@ -23,8 +23,3 @@ type SideGirl =
     | 'Vivian'
 
 export type GirlName = PrimaryGirl | SideGirl
-
-export enum GirlStat {
-    LOVE = 'love',
-    LUST = 'lust',
-}

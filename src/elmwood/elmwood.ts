@@ -1,14 +1,13 @@
 import type {
     SkillChoice,
     SkillName,
-    SkillPlan,
     SkillPointEvent,
     SkillPointId,
     SkillRequirement,
     WalkthroughState,
 } from '@/elmwood/types/skills.ts'
 import type { ChoiceOptions, ChoiceSkill, ShowChoice } from '@/elmwood/types/choices.ts'
-import { type GirlName, GirlStat } from '@/elmwood/types/girls.ts'
+import { type GirlName } from '@/elmwood/types/girls.ts'
 
 
 export const skillPointEvents: SkillPointEvent[] = [

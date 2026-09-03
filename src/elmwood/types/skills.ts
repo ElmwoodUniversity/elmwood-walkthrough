@@ -1,5 +1,4 @@
 import { Choice, Girl } from '@/elmwood/elmwood.ts'
-import type { ChoiceOptions } from '@/elmwood/types/choices.ts'
 
 export type SkillName =
     | 'Scholar' | 'Persuasion' | 'Deception' | 'Lie Detection'

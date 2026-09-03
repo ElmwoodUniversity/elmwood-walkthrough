@@ -7,27 +7,6 @@ const props = defineProps<{
   girls: Girl[]
 }>()
 
-const possibleClasses = [
-  'border-ashley',
-  'border-chelsea',
-  'border-chloe',
-  'border-ella',
-  'border-florence',
-  'border-jordan',
-  'border-katie',
-  'border-lydia',
-  'border-molly',
-  'border-naomi',
-  'border-nina',
-  'border-paris',
-  'border-saki',
-  'border-selina',
-  'border-tasha',
-  'border-taylor',
-  'border-veronika',
-  'border-violet',
-]
-
 const borderStyle = computed(() => {
   if (props.girls.length === 0) {
     return { background: '#ffffff' }
