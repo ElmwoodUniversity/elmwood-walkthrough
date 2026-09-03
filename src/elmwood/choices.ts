@@ -17,6 +17,8 @@ const hasSkill = (skillName: SkillName, by: SkillPointId, skillPlan: SkillPlan) 
     .slice(0, skillPointEvents.findIndex(ev => ev.id === by) + 1).some(ev => skillPlan[ev.id]?.includes(skillName))
 const hasSkills = (skillPlan: SkillPlan, by: SkillPointId, ...skillNames: SkillName[]) =>
     skillNames.every(skillName => skillPointEvents.slice(0, skillPointEvents.findIndex(ev => ev.id === by) + 1).some(ev => skillPlan[ev.id]?.includes(skillName)))
+const hasSkillsOr = (skillPlan: SkillPlan, by: SkillPointId, ...skillNames: SkillName[]) =>
+    skillNames.some(skillName => skillPointEvents.slice(0, skillPointEvents.findIndex(ev => ev.id === by) + 1).some(ev => skillPlan[ev.id]?.includes(skillName)))
 const hasChoices = (shownChoices: Choice[], ...ids: string[]): boolean =>
     ids.every(id => shownChoices.map(ch => ch.optionId).includes(id))
 const hasChoicesOr = (shownChoices: Choice[], ...ids: string[]) =>
@@ -24,6 +26,7 @@ const hasChoicesOr = (shownChoices: Choice[], ...ids: string[]) =>
 
 const req = {
     skills: (by: SkillPointId, ...skillNames: SkillName[]): ShowChoice => (_, __, { skillPlan }) => hasSkills(skillPlan, by, ...skillNames),
+    skillsOr: (by: SkillPointId, ...skillNames: SkillName[]): ShowChoice => (_, __, { skillPlan }) => hasSkillsOr(skillPlan, by, ...skillNames),
     noSkill: (skillName: SkillName, by: SkillPointId): ShowChoice => (_, __, { skillPlan }) => !hasSkill(skillName, by, skillPlan),
     choices: (...ids: string[]): ShowChoice => (_, __, { shownChoices }) => hasChoices(shownChoices, ...ids),
     choicesOr: (...ids: string[]): ShowChoice => (_, __, { shownChoices }) => hasChoicesOr(shownChoices, ...ids),
@@ -369,7 +372,7 @@ export const choices: Choice[] = [
     new Choice('Tell her about Chelsea', 'e4naomich', 4, 'Naomi lust +1', req.choices('e4naomi7', 'e1leaveparty3')),
     // TODO: Add "Help Naomi"/"Sabotage Naomi" choices if determined to be important in the future
     new Choice('Text Selina', 'e4selina2', 4, req.choices('e3stalk3')),
-    new Choice('Put her in her place', 'e4dd2', 4, req.skills('e4b', 'Persuasion')),
+    new Choice('Put her in her place', 'e4dd2', 4, req.skillsOr('e4b', 'Persuasion', 'Corruption')),
     new Choice('Text Violet', 'e4vitext', 4),
     new Choice('I\'m free', 'e4ctext', 4, req.choices('e3ctalk7')),
     new Choice('Text Paris', 'e4patext1', 4, req.choices('e3padate12')),

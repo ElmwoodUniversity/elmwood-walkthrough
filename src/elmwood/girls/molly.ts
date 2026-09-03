@@ -28,8 +28,9 @@ molly.addChoices(
 
 molly.addSkillRequirements(
     {
-            skill: 'Persuasion',
-            neededBy: 'e4b',
-            priority: SkillPriority.REQUIRED,
+        skills: ['Persuasion', 'Corruption'],
+        neededBy: 'e4b',
+        priority: SkillPriority.REQUIRED,
+        group: 'any',
     },
 )
