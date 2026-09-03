@@ -10,6 +10,7 @@
     "build-only": "vite build",
     "type-check": "vue-tsc --build"
   },
+  "packageManager": "pnpm@10.28.0",
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",
     "pinia": "^4.0.2",
