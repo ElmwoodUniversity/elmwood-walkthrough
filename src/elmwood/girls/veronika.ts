@@ -60,13 +60,9 @@ veronika.addSkillRequirements(
         priority: SkillPriority.STRONGLY_RECOMMENDED,
     },
     {
-        skill: 'Ownership',
+        skills: ['Ownership', 'Dexterity'],
         neededBy: 'e5b',
         priority: SkillPriority.RECOMMENDED,
-    },
-    {
-        skill: 'Dexterity',
-        neededBy: 'e5b',
-        priority: SkillPriority.RECOMMENDED,
+        group: 'all',
     },
 )

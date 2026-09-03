@@ -1,4 +1,4 @@
-import type { Skill, SkillName, SkillPlan } from '@/elmwood/types/skills.ts'
+import type { Skill, SkillName, SkillPlan, SkillRequirement } from '@/elmwood/types/skills.ts'
 import { type Girl, skillPointEvents } from '@/elmwood/elmwood.ts'
 import type { ChoiceOptions } from '@/elmwood/types/choices.ts'
 
@@ -55,6 +55,49 @@ export const skills: Record<SkillName, Skill> = {
     ...__skill('Devil\'s Kiss', 50, 'Blind Lust'),
 }
 
+function getRequirementOptions(requirement: SkillRequirement): SkillName[][] {
+    if ('skill' in requirement) {
+        return [[requirement.skill]]
+    }
+    if (requirement.group === 'all') {
+        return [requirement.skills]
+    }
+    return requirement.skills.map(skill => [skill])
+}
+
+function requirementIsSatisfied(requirement: SkillRequirement, alreadyBought: Set<SkillName>): boolean {
+    if ('skill' in requirement) {
+        return alreadyBought.has(requirement.skill)
+    }
+    if (requirement.group === 'all') {
+        return requirement.skills.every(skill => alreadyBought.has(skill))
+    }
+    return requirement.skills.some(skill => alreadyBought.has(skill))
+}
+
+function getMissingSkills(targetSkills: SkillName[], alreadyBought: Set<SkillName>): SkillName[] {
+    const result: SkillName[] = []
+    const seen = new Set<SkillName>()
+
+    for (const target of targetSkills) {
+        for (const skill of getRequiredSkills(target)) {
+            if (!alreadyBought.has(skill) && !seen.has(skill)) {
+                seen.add(skill)
+                result.push(skill)
+            }
+        }
+    }
+
+    return result
+}
+
+function getSkillCost(skillNames: SkillName[]): number {
+    return skillNames.reduce(
+        (total, skill) => total + skills[skill].cost,
+        0,
+    )
+}
+
 export function getRequiredSkills(skillName: SkillName, result = new Set<SkillName>()): Set<SkillName> {
     if (result.has(skillName)) {
         return result
@@ -104,7 +147,7 @@ function buildRequiredSkillPlan(selectedGirls: Girl[]): SkillPlan {
 
         for (const requirement of requirements) {
             // Already completely satisfied
-            if (alreadyBought.has(requirement.skill)) {
+            if (requirementIsSatisfied(requirement, alreadyBought)) {
                 continue
             }
 
@@ -117,9 +160,36 @@ function buildRequiredSkillPlan(selectedGirls: Girl[]): SkillPlan {
                 continue
             }
 
-            const requiredSkills = getRequiredSkills(requirement.skill)
+            const options = getRequirementOptions(requirement)
 
-            for (const skillName of requiredSkills) {
+            const candidates = options
+                .map(option => {
+                    const missingSkills = getMissingSkills(option, alreadyBought)
+                    return { missingSkills, cost: getSkillCost(missingSkills) }
+                })
+                .filter(candidate => candidate.missingSkills.length > 0)
+                .sort((a, b) => a.cost - b.cost)
+
+            // No missing skills means the requirement is already satisfied
+            if (candidates.length === 0) {
+                continue
+            }
+
+            /*
+             * For `all`, there is only one candidate.
+             *
+             * For `any`, candidates are sorted cheapest first,
+             * so pick the cheapest affordable one.
+             */
+            const candidate = candidates.find(
+                candidate => candidate.cost <= availablePoints
+            )
+
+            if (!candidate) {
+                continue
+            }
+
+            for (const skillName of candidate.missingSkills) {
                 if (alreadyBought.has(skillName)) {
                     continue
                 }

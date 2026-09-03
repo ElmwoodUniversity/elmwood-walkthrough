@@ -38,11 +38,22 @@ export interface SkillPointEvent {
     points: number
 }
 
-export interface SkillRequirement {
+interface SkillRequirementSingle {
     skill: SkillName
     neededBy: SkillPointId
     priority: SkillPriority
 }
+
+interface SkillRequirementGroup {
+    skills: SkillName[]
+    neededBy: SkillPointId
+    priority: SkillPriority
+    group: 'all' | 'any'
+}
+
+export type SkillRequirement =
+    | SkillRequirementSingle
+    | SkillRequirementGroup
 
 export type SkillPlan = Partial<Record<SkillPointId, SkillName[]>>
 
