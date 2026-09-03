@@ -3,6 +3,7 @@
 
 @theme {
   --color-background: #181818;
+  --color-text: rgba(235, 235, 235, 0.64);
   --color-elmwood: #ff7f27;
   --color-ashley: #FF0000;
   --color-chelsea: #FF8F00;
