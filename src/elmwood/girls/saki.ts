@@ -4,6 +4,8 @@ import { SkillPriority } from '@/elmwood/types/skills.ts'
 
 export const saki = new Girl('Saki', 'Saki Kishimoto', 'saki')
 
+saki.addRecommendedGirls('Ashley', 'Molly', 'Tasha')
+
 saki.addChoices(
     ...[
         'e2sameet5x',

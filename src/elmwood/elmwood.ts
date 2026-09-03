@@ -31,6 +31,9 @@ export class Girl {
     public skillRequirements: SkillRequirement[] = []
     public skillRequirementPredicate: SkillChoice|undefined
 
+    public recommendedGirls: GirlName[] = []
+    public incompatibleGirls: GirlName[] = []
+
     constructor(shortName: GirlName, longName: string, colour: string) {
         this.shortName = shortName
         this.longName = longName
@@ -55,6 +58,14 @@ export class Girl {
         } else {
             this.skillRequirementPredicate = requirements[0]
         }
+    }
+
+    public addRecommendedGirls(...girls: GirlName[]): void {
+        this.recommendedGirls.push(...girls)
+    }
+
+    public addIncompatibleGirls(...girls: GirlName[]): void {
+        this.incompatibleGirls.push(...girls)
     }
 
     public getSkillRequirements(selectedGirls: Girl[]): SkillRequirement[] {

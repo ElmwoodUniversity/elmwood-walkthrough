@@ -4,6 +4,8 @@ import { SkillPriority } from '@/elmwood/types/skills.ts'
 
 export const taylor = new Girl('Taylor', 'Taylor Griffiths', 'taylor')
 
+taylor.addRecommendedGirls('Katie', 'Violet')
+
 taylor.addChoices(
     ...[
         'intro9x',

@@ -3,6 +3,8 @@ import { selectChoice } from '@/elmwood/choices.ts'
 
 export const katie = new Girl('Katie', 'Katie Gregg', 'katie')
 
+katie.addRecommendedGirls('Taylor', 'Violet')
+
 katie.addChoices(
     ...[
         'intro3',

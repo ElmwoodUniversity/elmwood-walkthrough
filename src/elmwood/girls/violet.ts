@@ -3,6 +3,8 @@ import { selectChoice } from '@/elmwood/choices.ts'
 
 export const violet = new Girl('Violet', 'Violet Middleton', 'violet')
 
+violet.addRecommendedGirls('Katie', 'Taylor')
+
 violet.addChoices(
     ...[
         'vimeet1', // "I told her that she doesn't owe me anything."

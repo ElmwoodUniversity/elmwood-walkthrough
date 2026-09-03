@@ -4,6 +4,7 @@ import type { SkillName, SkillPointId, WalkthroughState } from '@/elmwood/types/
 export interface ChoiceOptions {
     includeSideGirls: boolean
     includeUnselectedForScenes: boolean
+    forceRecommendedGroups: boolean
 }
 
 export interface ChoiceSkill {

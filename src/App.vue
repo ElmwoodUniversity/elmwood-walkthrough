@@ -10,7 +10,8 @@ import { buildSkillPlan } from '@/elmwood/skills.ts'
 const selectedGirls = ref<Girl[]>([])
 const choiceOptions = ref<ChoiceOptions>({
   includeSideGirls: true,
-  includeUnselectedForScenes: true
+  includeUnselectedForScenes: true,
+  forceRecommendedGroups: false,
 })
 const episodes = choices.map(ch => ch.episode).reduce((prev: number[], cur: number) => {
   if (!prev.includes(cur)) prev.push(cur)
@@ -18,6 +19,10 @@ const episodes = choices.map(ch => ch.episode).reduce((prev: number[], cur: numb
 }, [])
 
 const toggleGirl = (girl: Girl): void => {
+  if (choiceOptions.value.forceRecommendedGroups) {
+    selectedGirls.value.splice(0)
+  }
+
   const index = selectedGirls.value.findIndex(g => g.shortName === girl.shortName)
 
   if (index === -1) {
@@ -25,10 +30,43 @@ const toggleGirl = (girl: Girl): void => {
   } else {
     selectedGirls.value.splice(index, 1)
   }
+
+  if (choiceOptions.value.forceRecommendedGroups) {
+    selectedGirls.value.push(...girl.recommendedGirls.map(name => [...girls, ...sideGirls].find(g => g.shortName === name)!))
+  }
+}
+
+const toggleForceRecommendedGroups = () => {
+  if (choiceOptions.value.forceRecommendedGroups) {
+    choiceOptions.value.forceRecommendedGroups = false
+  } else {
+    choiceOptions.value.forceRecommendedGroups = true
+    selectedGirls.value.splice(0)
+  }
 }
 
 const isSelectedGirl = (girl: Girl) =>
     !!selectedGirls.value.find(g => g.shortName === girl.shortName)
+
+const incompatibleGirls = computed(() => {
+  const incompatibilities: Girl[][] = []
+  for (const girl of selectedGirls.value) {
+    if (!girl.incompatibleGirls.length) {
+      continue
+    }
+
+    const incompatible = [girl]
+    for (const g2 of selectedGirls.value) {
+      if (girl.incompatibleGirls.includes(g2.shortName)) {
+        incompatible.push(g2)
+      }
+    }
+    if (incompatible.length > 1) {
+      incompatibilities.push(incompatible)
+    }
+  }
+  return incompatibilities
+})
 
 const skillPlan = computed(() => buildSkillPlan(selectedGirls.value))
 
@@ -64,6 +102,17 @@ const preloadedClasses = [
           <div class="max-w-md w-sm rounded-3xl p-0.5 my-4 mx-2 bg-white">
             <div class="rounded-[calc(1.5rem-2px)] p-8 bg-background relative">
               <p class="font-bold">Select girls to create your path</p>
+              <p v-if="choiceOptions.forceRecommendedGroups">When you select a girl, their recommended girls will also get selected.</p>
+            </div>
+          </div>
+        </div>
+        <div v-else-if="incompatibleGirls.length > 0" class="w-full flex justify-center col-span-12">
+          <div class="max-w-md w-fit rounded-3xl p-0.5 my-4 mx-2 bg-red-600">
+            <div class="rounded-[calc(1.5rem-2px)] p-8 bg-background relative">
+              <p class="font-bold">{{ incompatibleGirls.length }} of your selections are incompatible with each other.</p>
+              <ul>
+                <li v-for="incompatibility in incompatibleGirls">{{ incompatibility.slice(1).map(g => g.shortName).join(', ') }} {{ incompatibility.length == 2 ? 'is' : 'are' }} incompatible with {{ incompatibility[0]!.shortName }}</li>
+              </ul>
             </div>
           </div>
         </div>
@@ -97,6 +146,9 @@ const preloadedClasses = [
           <li class="cursor-pointer"
               :class="{ 'font-bold': choiceOptions.includeUnselectedForScenes }"
               @click="choiceOptions.includeUnselectedForScenes = !choiceOptions.includeUnselectedForScenes">Include Unselected for Scenes</li>
+          <li class="cursor-pointer"
+              :class="{ 'font-bold': choiceOptions.forceRecommendedGroups }"
+              @click="toggleForceRecommendedGroups()">Force recommended groups</li>
         </ul>
       </div>
     </div>

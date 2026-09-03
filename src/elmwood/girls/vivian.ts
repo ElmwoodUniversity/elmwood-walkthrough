@@ -4,6 +4,8 @@ import { SkillPriority } from '@/elmwood/types/skills.ts'
 
 export const vivian = new Girl('Vivian', 'Vivian', 'vivian')
 
+vivian.addRecommendedGirls('Saki', 'Dr. Novotná')
+
 vivian.addChoices(
     ...[
         'e5ethan1',

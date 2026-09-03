@@ -4,6 +4,9 @@ import { SkillPriority, type SkillRequirement } from '@/elmwood/types/skills.ts'
 
 export const tasha = new Girl('Tasha', 'Tasha Berry', 'tasha')
 
+tasha.addRecommendedGirls('Ashley', 'Saki', 'Molly')
+tasha.addIncompatibleGirls('Chelsea', 'Paris')
+
 tasha.addChoices(
     ...[
         'e1leaveparty1',
