@@ -43,7 +43,7 @@ saki.addChoices(
         'e5sakiobedience',
         'e5sakiobedience2', // "I trained her to kneel on command."
         'e5sakiobedience3a', // "I gave her permission to touch herself and cum."
-        'e5sakiobedience3a', // "I didn't give her my permission to cum."
+        'e5sakiobedience3b', // "I didn't give her my permission to cum."
     ].map(id => selectChoice(id)),
 )
 
