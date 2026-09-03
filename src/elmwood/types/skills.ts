@@ -44,7 +44,7 @@ interface SkillRequirementSingle {
     priority: SkillPriority
 }
 
-interface SkillRequirementGroup {
+export interface SkillRequirementGroup {
     skills: SkillName[]
     neededBy: SkillPointId
     priority: SkillPriority
@@ -54,6 +54,13 @@ interface SkillRequirementGroup {
 export type SkillRequirement =
     | SkillRequirementSingle
     | SkillRequirementGroup
+
+export interface SkillRequirementCandidate {
+    skills: SkillName[]
+    immediateCost: number
+    priorityCost: number
+    totalCost: number
+}
 
 export type SkillPlan = Partial<Record<SkillPointId, SkillName[]>>
 

@@ -1,6 +1,12 @@
-import type { Skill, SkillName, SkillPlan, SkillRequirement } from '@/elmwood/types/skills.ts'
+import type {
+    Skill,
+    SkillName,
+    SkillPlan,
+    SkillPointId,
+    SkillRequirement, SkillRequirementCandidate,
+    SkillRequirementGroup,
+} from '@/elmwood/types/skills.ts'
 import { type Girl, skillPointEvents } from '@/elmwood/elmwood.ts'
-import type { ChoiceOptions } from '@/elmwood/types/choices.ts'
 
 const __skill = <N extends SkillName>(name: N, cost: number, ...prerequisites: SkillName[]): Record<N, Skill> =>
     ({ [name]: { name, cost, prerequisites } } as unknown as Record<N, Skill>)
@@ -98,6 +104,107 @@ function getSkillCost(skillNames: SkillName[]): number {
     )
 }
 
+function getMinimumRequirementCost(requirements: SkillRequirement[], alreadyBought: Set<SkillName>): number {
+    const memo = new Map<string, number>()
+
+    const recurse = (index: number, currentBought: Set<SkillName>): number => {
+        if (index >= requirements.length) {
+            return 0
+        }
+
+        const key = `${index}|${[...currentBought].sort().join(',')}`
+
+        const cached = memo.get(key)
+
+        if (cached !== undefined) {
+            return cached
+        }
+
+        const requirement = requirements[index]!
+
+        if (requirementIsSatisfied(requirement, currentBought)) {
+            const result = recurse(index + 1, currentBought)
+            memo.set(key, result)
+            return result
+        }
+
+        let bestCost = Infinity
+
+        for (const option of getRequirementOptions(requirement)) {
+            const missingSkills = getMissingSkills(option, currentBought)
+
+            const immediateCost = getSkillCost(missingSkills)
+
+            const nextBought = new Set(currentBought)
+
+            for (const skill of missingSkills) {
+                nextBought.add(skill)
+            }
+
+            const totalCost = immediateCost + recurse(index + 1, nextBought)
+
+            bestCost = Math.min(bestCost, totalCost)
+        }
+
+        memo.set(key, bestCost)
+        return bestCost
+    }
+
+    return recurse(0, alreadyBought)
+}
+
+function getAnyRequirementCandidates(
+    requirement: SkillRequirementGroup,
+    requirementIndex: number,
+    requirements: SkillRequirement[],
+    bought: Set<SkillName>,
+    eventIndex: number,
+): SkillRequirementCandidate[] {
+    const futureRequirements = requirements.filter(
+        (other, index) =>
+            index !== requirementIndex &&
+            getSkillPointEventIndex(other.neededBy) >= eventIndex
+    )
+
+    const priorityRequirements = futureRequirements.filter(
+        other => other.priority >= requirement.priority
+    )
+
+    return getRequirementOptions(requirement)
+        .map(option => {
+            const missingSkills = getMissingSkills(option, bought)
+            const immediateCost = getSkillCost(missingSkills)
+
+            const projectedBought = new Set(bought)
+
+            for (const skill of missingSkills) {
+                projectedBought.add(skill)
+            }
+
+            const priorityProjectedCost = getMinimumRequirementCost(
+                priorityRequirements,
+                projectedBought,
+            )
+
+            const totalProjectedCost = getMinimumRequirementCost(
+                futureRequirements,
+                projectedBought,
+            )
+
+            return {
+                skills: missingSkills,
+                immediateCost,
+                priorityCost: immediateCost + priorityProjectedCost,
+                totalCost: immediateCost + totalProjectedCost,
+            }
+        })
+        .sort((a, b) =>
+            a.priorityCost - b.priorityCost ||
+            a.totalCost - b.totalCost ||
+            a.immediateCost - b.immediateCost
+        )
+}
+
 export function getRequiredSkills(skillName: SkillName, result = new Set<SkillName>()): Set<SkillName> {
     if (result.has(skillName)) {
         return result
@@ -111,12 +218,8 @@ export function getRequiredSkills(skillName: SkillName, result = new Set<SkillNa
     return result
 }
 
-export function additionalCost(skillName: SkillName, alreadyBought: Set<SkillName>): number {
-    const required = getRequiredSkills(skillName)
-
-    return [...required]
-        .filter(name => !alreadyBought.has(name))
-        .reduce((total, name) => total + skills[name].cost, 0)
+function getSkillPointEventIndex(id: SkillPointId): number {
+    return skillPointEvents.findIndex(event => event.id === id)
 }
 
 function buildRequiredSkillPlan(selectedGirls: Girl[]): SkillPlan {
@@ -133,8 +236,7 @@ function buildRequiredSkillPlan(selectedGirls: Girl[]): SkillPlan {
 
             // for equal priority, earlier deadline first
             return (
-                skillPointEvents.findIndex(ev => ev.id === a.neededBy) -
-                    skillPointEvents.findIndex(ev => ev.id === b.neededBy)
+                getSkillPointEventIndex(a.neededBy) - getSkillPointEventIndex(b.neededBy)
             )
         })
 
@@ -145,7 +247,9 @@ function buildRequiredSkillPlan(selectedGirls: Girl[]): SkillPlan {
         availablePoints += event.points
         plan[event.id] = []
 
-        for (const requirement of requirements) {
+        for (let requirementIndex = 0; requirementIndex < requirements.length; requirementIndex++) {
+            const requirement = requirements[requirementIndex]!
+
             // Already completely satisfied
             if (requirementIsSatisfied(requirement, alreadyBought)) {
                 continue
@@ -160,36 +264,61 @@ function buildRequiredSkillPlan(selectedGirls: Girl[]): SkillPlan {
                 continue
             }
 
-            const options = getRequirementOptions(requirement)
-
-            const candidates = options
-                .map(option => {
-                    const missingSkills = getMissingSkills(option, alreadyBought)
-                    return { missingSkills, cost: getSkillCost(missingSkills) }
-                })
-                .filter(candidate => candidate.missingSkills.length > 0)
-                .sort((a, b) => a.cost - b.cost)
-
-            // No missing skills means the requirement is already satisfied
-            if (candidates.length === 0) {
-                continue
-            }
+            let skillsToBuy: SkillName[] | undefined
 
             /*
-             * For `all`, there is only one candidate.
+             * ANY group:
              *
-             * For `any`, candidates are sorted cheapest first,
-             * so pick the cheapest affordable one.
+             * Project the long-term cost of every branch rather
+             * than simply choosing the cheapest one right now.
              */
-            const candidate = candidates.find(
-                candidate => candidate.cost <= availablePoints
-            )
+            if ('group' in requirement && requirement.group === 'any') {
+                const candidates = getAnyRequirementCandidates(
+                    requirement,
+                    requirementIndex,
+                    requirements,
+                    alreadyBought,
+                    eventIndex,
+                )
 
-            if (!candidate) {
+                const bestCandidate = candidates[0]
+
+                if (!bestCandidate) {
+                    continue
+                }
+
+                if (bestCandidate.immediateCost <= availablePoints) {
+                    // Globally preferred branch is affordable now
+                    skillsToBuy = bestCandidate.skills
+                } else if (deadlineIndex === eventIndex) {
+                    // Can no longer afford the preferred branch.
+                    // Fall back to the best branch we CAN afford.
+                    const affordableCandidate = candidates.find(
+                        candidate => candidate.immediateCost <= availablePoints,
+                    )
+
+                    if (affordableCandidate) {
+                        skillsToBuy = affordableCandidate.skills
+                    }
+                }
+            } else {
+                // Single and ALL requirements are atomic
+                const [option] = getRequirementOptions(requirement)
+
+                const missingSkills = getMissingSkills(option!, alreadyBought)
+
+                const cost = getSkillCost(missingSkills)
+
+                if (cost <= availablePoints) {
+                    skillsToBuy = missingSkills
+                }
+            }
+
+            if (!skillsToBuy) {
                 continue
             }
 
-            for (const skillName of candidate.missingSkills) {
+            for (const skillName of skillsToBuy) {
                 if (alreadyBought.has(skillName)) {
                     continue
                 }
