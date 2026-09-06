@@ -45,6 +45,7 @@ ashley.addChoices(
         'e3gym13',
         'e3gym14',
         'e3gym15',
+        // e3gymflirt = True if: (hasChoicesOr(shownChoices, 'e3gym3b', 'e3gym3c') || hasChoices(shownChoices, 'e2truth2d', 'e2twinhj4'))
         'e3massage1a', // "I convincingly lied about hanging out with a friend."
         'e3massage1b', // "I lied that I wasn't seeing Paris later."
         'e3massage1c',
