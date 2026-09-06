@@ -129,10 +129,11 @@ const preloadedClasses = [
       </div>
     </div>
     <div class="
-    fixed left-0 top-0 w-full h-dvh
+    fixed inset-0
+    overflow-y-auto
     bg-background flex justify-center
     transition-transform duration-250 ease-in-out
-    lg:left-auto lg:static lg:block
+    lg:static lg:h-auto lg:overflow-visible lg:block
     " :class="{
       'translate-x-full': !sidebarVisible,
       'translate-x-0': sidebarVisible,
