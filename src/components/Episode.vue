@@ -37,7 +37,8 @@ const shownChoices = computed(() => {
                     'col-span-12': !choice.isConflicting(selectedGirls, conflictingChoices, choiceOptions, { skillPlan, shownChoices }),
                     }">
           <ChoiceEl :choice="choice"
-                    :girls="selectedGirls.filter(girl => girl.choices.map(ch => ch.optionId).includes(choice.optionId))" />
+                    :girls="selectedGirls.filter(girl => girl.choices.map(ch => ch.optionId).includes(choice.optionId))"
+                    :conflicting="choice.isConflicting(selectedGirls, conflictingChoices, choiceOptions, { skillPlan, shownChoices })" />
         </div>
       </template>
     </div>

@@ -3,7 +3,7 @@ import type { Girl } from '@/elmwood/elmwood.ts'
 import { choices } from '@/elmwood/choices.ts'
 import { girls, sideGirls } from '@/elmwood/girls'
 import type { ChoiceOptions } from '@/elmwood/types/choices.ts'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import Episode from '@/components/Episode.vue'
 import { buildSkillPlan } from '@/elmwood/skills.ts'
 
@@ -70,6 +70,12 @@ const incompatibleGirls = computed(() => {
 
 const skillPlan = computed(() => buildSkillPlan(selectedGirls.value))
 
+const sidebarVisible = ref<boolean>(false)
+
+watch(sidebarVisible, visible => {
+  document.body.classList.toggle('overflow-hidden', visible)
+})
+
 const preloadedClasses = [
   'text-ashley',
   'text-chelsea',
@@ -95,8 +101,8 @@ const preloadedClasses = [
 </script>
 
 <template>
-  <div class="grid grid-cols-5 gap-6 w-7xl">
-    <div class="col-span-4">
+  <div class="grid grid-cols-5 gap-6 w-fit lg:w-7xl">
+    <div class="col-span-5 lg:col-span-4">
       <div class="grid grid-cols-12">
         <div v-if="selectedGirls.length === 0" class="w-full flex justify-center col-span-12">
           <div class="max-w-md w-sm rounded-3xl p-0.5 my-4 mx-2 bg-white">
@@ -122,8 +128,16 @@ const preloadedClasses = [
         </template>
       </div>
     </div>
-    <div>
-      <div class="sticky top-4">
+    <div class="
+    fixed left-0 top-0 w-full h-dvh
+    bg-background flex justify-center
+    transition-transform duration-250 ease-in-out
+    lg:left-auto lg:static lg:block
+    " :class="{
+      'translate-x-full': !sidebarVisible,
+      'translate-x-0': sidebarVisible,
+    }">
+      <div class="relative lg:sticky top-4 max-w-3xs">
         <div class="border-2 border-white rounded-3xl p-8">
           <p class="text-lg border-b border-white text-white mb-2">Girls</p>
           <ul class="mb-4">
@@ -163,6 +177,11 @@ const preloadedClasses = [
       </div>
     </div>
   </div>
+  <button type="button" class="line-block lg:hidden top-4 right-4 z-10 absolute hamburger" :class="{ 'is-active': sidebarVisible }" @click="sidebarVisible = !sidebarVisible">
+    <span class="hamburger-box">
+      <span class="hamburger-inner"></span>
+    </span>
+  </button>
 </template>
 
 <style scoped>

@@ -5,6 +5,7 @@ import { computed } from 'vue'
 const props = defineProps<{
   choice: Choice
   girls: Girl[]
+  conflicting: boolean
 }>()
 
 const borderStyle = computed(() => {
@@ -50,10 +51,13 @@ const backgroundStyle = computed(() => {
 
 <template>
   <div class="max-w-md w-md rounded-3xl p-0.5 my-3 mx-2" :style="borderStyle">
-    <div class="rounded-[calc(1.5rem-2px)] bg-background relative">
-      <div class="w-full h-full p-8" :style="backgroundStyle">
-        <p class="font-bold relative" :class="{ '-top-3': choice.note }">{{ choice.optionName }}</p>
-        <p class="text-sm italic absolute bottom-2 pr-8" v-if="choice.note">{{ choice.note }}</p>
+    <div class="rounded-[calc(1.5rem-2px)] bg-background relative h-full">
+      <div class="w-full h-full" :class="{
+        'p-8': !conflicting,
+        'px-[2px] sm:px-4 py-8 lg:px-8': conflicting,
+      }" :style="backgroundStyle">
+        <p class="font-bold relative text-sm lg:text-base" :class="{ '-top-3': choice.note }">{{ choice.optionName }}</p>
+        <p class="text-xs lg:text-sm italic absolute bottom-2 pr-8" v-if="choice.note">{{ choice.note }}</p>
       </div>
       <p class="text-xs absolute top-[-14px] left-5 bg-background p-1">{{ choice.optionId }}</p>
     </div>
